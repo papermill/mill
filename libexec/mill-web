@@ -1,0 +1,33 @@
+#!/usr/bin/env sh
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# MILL WEB  #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# Usage: mill web
+# Summary: Output to HTML
+# Help: Use this to output the document to a format suitable for
+# the web (HTML).
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+set -e
+
+# Find every markdown file and start a loop for it
+echo "[>] Output to WEB ..."
+
+for INPUTFILE in $(find *.markdown -maxdepth 0 -type f -not \( -name "images" \))
+do
+
+    # Process MARKDOWN Files
+    echo "   [#] Processing $INPUTFILE ..."
+
+	~/.cabal/bin/pandoc "$INPUTFILE" \
+	--write=html5 --standalone --smart --toc --section-divs --normalize --number-sections \
+	--output="$INPUTFILE.generated.html"
+	
+	echo "   [!] Finished processing "$INPUTFILE"..."
+	# END Process MARKDOWN Files
+	
+    # Open the generated Files (OS X only)
+	open -g -a /Applications/Safari.app "$INPUTFILE.generated.html"
+done
+
+echo "[<] Finished output to WEB ..."
