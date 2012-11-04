@@ -1,0 +1,15 @@
+#!/usr/bin/env sh
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# MILL CMD  #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# Usage: mill cmd
+# Summary: A command
+# Help: This is a command. It does nothing.
+# Use it like this:
+#
+#    mill cmd
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+set -e
+
+echo "This does nothing."
