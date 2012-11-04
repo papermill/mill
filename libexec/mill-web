@@ -1,12 +1,12 @@
 #!/usr/bin/env sh
-# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
 # MILL WEB  #
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 # Usage: mill web
 # Summary: Output to HTML
 # Help: Use this to output the document to a format suitable for
 # the web (HTML).
-# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+#
 
 set -e
 

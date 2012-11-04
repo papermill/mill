@@ -1,6 +1,6 @@
 #!/usr/bin/env sh
-# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
-# MILL CMD  #
+
+# MILL CMD #
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 # Usage: mill cmd
 # Summary: A command
@@ -8,7 +8,7 @@
 # Use it like this:
 #
 #    mill cmd
-# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+#
 
 set -e
 
