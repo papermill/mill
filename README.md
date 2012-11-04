@@ -2,6 +2,9 @@
 
 ## Install
 
+    cd ~
+    git clone https://github.com/papermill/mill.git ~/.mill
+
     # Load mill automatically by adding
     # the following to ~/.bash_profile:
     eval "$(/Users/mfa/CODE/KTE/papermill/mill/bin/mill init -)"
