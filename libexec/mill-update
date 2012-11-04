@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+set -e
+
+echo "Updating mill in "$_MILL_ROOT" ..."
+cd $_MILL_ROOT
+( git stash -q && git pull -q --stat origin master && git stash pop -q) \
+&& echo "SUCCESS" \
+|| echo "FAIL"
