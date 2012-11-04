@@ -1,5 +1,9 @@
 # `mill` -- papermill CLI utility
 
+## WTF?
+
+See [papermill](https://github.com/papermill/documentation).
+
 ## Install
 
     cd ~
