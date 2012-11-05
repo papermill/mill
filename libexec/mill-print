@@ -1,0 +1,63 @@
+#!/bin/sh
+
+# MILL WEB  #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# Usage: mill web
+# Summary: Output to HTML
+# Help: Use this to output the document to a format suitable for
+# the web (HTML).
+#
+
+set -e
+
+# Where we are
+BASE_DIR="$(pwd)"
+
+echo "[>] Output to PRINT ..."
+# Find every Markdown file and start a loop for it
+for INPUTFILE in $(find *.markdown -maxdepth 0 -type f -not \( -name "images" \))
+do
+
+    # Generate PDF Files
+	cd "$BASE_DIR"
+    
+    echo "    [#] Generating PDF: $INPUTFILE ..."
+    
+	{   
+		~/.cabal/bin/pandoc "$INPUTFILE" \
+		\
+		--smart \
+		--normalize \
+		--number-sections \
+		--section-divs \
+		--toc \
+        --variable=links-as-notes:true \
+        --variable=documentclass:report \
+		--bibliography="./bibliography.bib" \
+		--csl=".papermill/din-1505-2.csl" \
+		\
+		--to=latex \
+		--latex-engine="/usr/texbin/xelatex" \
+        --no-tex-ligatures \
+        --variable=lang:german \
+        --variable=urlcolor:black \
+        --variable=linkcolor:black \
+        --variable=verbatim-in-note:true \
+		\
+		--output=""$INPUTFILE"-output.pdf"
+		
+		#--variable=links-as-notes:true
+        #--template="./.papermill/nts.latex" \
+
+	} && {
+	    echo "   [!] SUCCESS"
+		open ""$INPUTFILE"-output.pdf"
+	}    
+	
+done
+# END Process MARKDOWN Files
+
+echo "[<] Finished output to PRINT"
+
+# CLEANUP
+rm "_After-Title.generated.latex" *"_Impressum.generated.latex" "Version.markdown" "Version.generated.latex"
