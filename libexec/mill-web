@@ -21,6 +21,8 @@ do
 
 	~/.cabal/bin/pandoc "$INPUTFILE" \
 	--write=html5 --standalone --smart --toc --section-divs --normalize --number-sections \
+	--bibliography="./bibliography.bib" \
+	--csl=".papermill/din-1505-2.csl" \
 	--output="$INPUTFILE.generated.html"
 	
 	echo "   [!] Finished processing "$INPUTFILE"..."
