@@ -1,0 +1,23 @@
+#!/usr/bin/env sh
+
+# MILL NEW #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# Usage: mill new NAME
+# Summary: Make a blank paper from the stationery.
+# Help: Create a new folder with the name you choose
+# and some content to get you started.
+#
+
+set -e
+source $_MILL_ROOT/share/mill/local.config
+
+NAME="$1"
+
+git clone "$STATIONERY_REPO" "$NAME" \
+&& cd "$NAME" \
+&& rm -rf .git \
+&& git init \
+&& git add --all \
+&& git commit -m "Starting $NAME" \
+&& echo "[!] Made new paper "$NAME"" \
+&& echo "    If you don't want git, just delete the .git folder."

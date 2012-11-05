@@ -11,5 +11,6 @@
 #
 
 set -e
+source $_MILL_ROOT/share/mill/local.config
 
 echo "This does nothing."

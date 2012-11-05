@@ -1,4 +1,4 @@
-#!/usr/bin/env sh
+#!/bin/sh
 
 # MILL WEB  #
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
@@ -17,7 +17,7 @@ for INPUTFILE in $(find *.markdown -maxdepth 0 -type f -not \( -name "images" \)
 do
 
     # Process MARKDOWN Files
-    echo "   [#] Processing $INPUTFILE ..."
+    echo "   [#] Generating HTML: $INPUTFILE ..."
 
 	~/.cabal/bin/pandoc "$INPUTFILE" \
 	--write=html5 --standalone --smart --toc --section-divs --normalize --number-sections \
