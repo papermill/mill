@@ -1,0 +1,48 @@
+#!/usr/bin/env sh
+
+# MILL OPEN #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# Usage: mill shim <nasty hack>
+# Summary: Glue code and/or nasty hacks 'mill' needs to work.
+# Help: Glue code and/or nasty hacks 'mill' needs to work.
+# It's just a shell script which takes different arguments.
+#
+#   mill shim open <file> -- open file os independent
+#
+
+set -e
+source $_MILL_ROOT/share/mill/local.config
+
+# LEAVE IT ALL IN 1 FILE FOR NOW
+# THE FUNCTIONS COULD BE SEPERATED
+# BUT QUESTION IS HOW TO INTEGRATE WITH 'SUB'
+# see <https://github.com/37signals/sub/issues/22>
+
+SUBCMD="$1"
+SUBARG1="$2"
+
+#############################################
+# SUB-COMMAND FUNCTIONS
+
+function shim_open(){
+    INPUTFILE="$SUBARG1"
+    SYSTEM="$(uname)"
+
+    case "$SYSTEM" in
+	Darwin )
+	    echo "$INPUTFILE"
+	    open "$INPUTFILE"
+	    ;;
+	Linux )
+	    xdg-open "$INPUTFILE"
+    esac
+}
+
+#############################################
+# SUB-COMMAND LOGIC
+
+case "$SUBCMD" in
+    open )
+    shim_open
+	;;
+esac

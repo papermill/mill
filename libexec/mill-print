@@ -51,7 +51,7 @@ do
 
 	} && {
 	    echo "   [!] SUCCESS"
-		open ""$INPUTFILE"-output.pdf"
+		mill shim open ""$INPUTFILE"-output.pdf"
 	}    
 	
 done
