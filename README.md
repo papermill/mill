@@ -13,9 +13,22 @@ See [papermill](https://github.com/papermill/documentation).
     # the following to ~/.bash_profile:
     eval "$(/Users/mfa/CODE/KTE/papermill/mill/bin/mill init -)"
 
+### Dependencies
+
+On **OS X**:
+
+- Get the [MacTeX distribution](http://www.tug.org/mactex/index.html)
+- Install `pandoc`
+    - with [homebrew](http://mxcl.github.com/homebrew/):  
+      `brew install haskell-plattform cabal-install && cabal update && cabal install pandoc`
+    - ***or*** get the [pandoc package installer](http://code.google.com/p/pandoc/downloads/)
+
+
 ## Use
 
-    mill help
+    mill [help]
+    
+![screen shot](https://raw.github.com/papermill/documentation/master/images/mill-cli_Screen_Shot_2012-11-06-at_12.59.56@2x.png)
     
 ## Extend
 
