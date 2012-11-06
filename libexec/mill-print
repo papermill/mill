@@ -60,4 +60,8 @@ done
 echo "[<] Finished output to PRINT"
 
 # CLEANUP
-rm "_After-Title.generated.latex" *"_Impressum.generated.latex" "Version.markdown" "Version.generated.latex"
+
+for TMPFILE in "_After-Title.generated.latex", *"_Impressum.generated.latex", "Version.markdown", "Version.generated.latex"
+do \
+    [[ -e "$TMPFILE" ]] && rm -rf "$TMPFILE"
+done
