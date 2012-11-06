@@ -11,6 +11,8 @@
 #
 
 set -e
+
+. $_MILL_ROOT/share/mill/global.functions
 source $_MILL_ROOT/share/mill/local.config
 
 # LEAVE IT ALL IN 1 FILE FOR NOW
@@ -26,10 +28,11 @@ SUBARG1="$2"
 
 function shim_open(){
     INPUTFILE="$SUBARG1"
-    SYSTEM="$(uname)"
 
-    case "$SYSTEM" in
-	Darwin )
+    echo "$PLATFORM."
+
+    case "$PLATFORM" in
+	Mac )
 	    echo "$INPUTFILE"
 	    open "$INPUTFILE"
 	    ;;

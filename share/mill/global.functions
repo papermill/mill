@@ -1,0 +1,16 @@
+#!/bin/sh
+
+# Unused
+mill_find_platform() {
+    # FIND THE PLATFORM
+    # : "Mac", "Linux"
+    SYSTEM="$(uname)"
+    case "$SYSTEM" in
+	Darwin )
+	PLATFORM="Mac"
+	    ;;
+	Linux )
+	PLATFORM="Linux"
+    esac
+}
+mill_find_platform # run it to initiate var
