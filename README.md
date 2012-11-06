@@ -11,7 +11,7 @@ See [papermill](https://github.com/papermill/documentation).
 
     # Load mill automatically by adding
     # the following to ~/.bash_profile:
-    eval "$(/Users/mfa/CODE/KTE/papermill/mill/bin/mill init -)"
+    eval "$(~/.mill/bin/mill init -)"
 
 ### Dependencies
 
