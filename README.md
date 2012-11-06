@@ -26,7 +26,17 @@ On **OS X**:
 
 ## Use
 
-    mill [help]
+Help is available:
+
+    mill help
+
+A small walktrough testing if everything works:
+
+    cd /tmp
+    mill new My-Paper
+    cd My-Paper
+    mill web
+    mill print
     
 ![screen shot](https://raw.github.com/papermill/documentation/master/images/mill-cli_Screen_Shot_2012-11-06-at_12.59.56@2x.png)
     
