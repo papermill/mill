@@ -28,9 +28,6 @@ SUBARG1="$2"
 
 function shim_open(){
     INPUTFILE="$SUBARG1"
-
-    echo "$PLATFORM."
-
     case "$PLATFORM" in
 	Mac )
 	    echo "$INPUTFILE"
