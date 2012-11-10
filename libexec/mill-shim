@@ -1,7 +1,7 @@
 #!/bin/sh
 
-# MILL OPEN #
-# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# # MILL SHIM #
+#+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 # Usage: mill shim <nasty hack>
 # Summary: Glue code and/or nasty hacks 'mill' needs to work.
 # Help: Glue code and/or nasty hacks 'mill' needs to work.
@@ -24,25 +24,42 @@ SUBCMD="$1"
 SUBARG1="$2"
 
 #############################################
-# SUB-COMMAND FUNCTIONS
+# ## SUB-COMMAND FUNCTIONS
 
 function shim_open(){
     INPUTFILE="$SUBARG1"
+    
     case "$PLATFORM" in
-	Mac )
-	    echo "$INPUTFILE"
-	    open "$INPUTFILE"
-	    ;;
-	Linux )
-	    xdg-open "$INPUTFILE"
+    Mac )
+        open "$INPUTFILE"
+        ;;
+    Linux )
+        # TODO: should check for gnome-open, kde-open and xdg-open
+        # TODO: should open in Terminal/GUI according to terminal type (virtual or not) -- or try GUI and fallback to vim
+        xdg-open "$INPUTFILE"
     esac
 }
 
+function shim_pandoc()
+{
+    # IF USER HAS SET 'MY_PANDOC' in mill/share/mill/local.config
+    if [[ "$MY_PANDOC" != ""]]; then
+        [[ -e ""$PATH"/pandoc" ]] && ""$PATH"/pandoc" && return
+    fi
+    # TEST ALL OTHER POSSIBLE PATHS IN ORDER OF PREFERENCE
+    for PATH in "~/.papermill/bin" "~/.cabal/bin" "/usr/local/bin" "/usr/bin" ; do
+        [[ -e ""$PATH"/pandoc" ]] && ""$PATH"/pandoc" && return
+    done
+}
+
 #############################################
-# SUB-COMMAND LOGIC
+# # SUB-COMMAND LOGIC
 
 case "$SUBCMD" in
     open )
     shim_open
+	;;
+    pandoc )
+    shim_pandoc
 	;;
 esac
