@@ -2,10 +2,15 @@
 
 # MILL NEW #
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
-# Usage: mill new <NAME>
+# Usage: mill new <NAME> [stationery]
 # Summary: Make a blank paper from the stationery.
 # Help: Create a new folder with the name you choose
 # and some content to get you started.
+# Optionally choose a stationery (default is Paper).
+#
+# Stationaries:
+# * Paper
+# * Simple
 #
 
 set -e
@@ -13,14 +18,20 @@ source $_MILL_ROOT/share/mill/local.config
 
 NAME="$1"
 
-echo "[>] Creating new Paper in /"$NAME""
+# DEFAULT STATIONERY
+STATIONERY="Paper"
+
+echo "[>] Creating new "$STATIONERY" in /"$NAME""
 
 git clone -q "$STATIONERY_REPO" "$NAME" \
 && cd "$NAME" \
+&& mv "Document.markdown" ""$NAME".markdown" \
 && rm -rf .git \
 && git init -q \
 && git add --all \
 && git commit -m "Starting $NAME" |while read REPLY; do echo "    [#] $REPLY"; done \
 && echo "    [#] SUCCESS!" \
-&& echo "[<] Started new Paper in /"$NAME"" \
-&& echo "[!] If you don't want git, just delete the .git folder."
+&& echo "[<] Started new "$STATIONERY" in /"$NAME"" \
+&& echo "[!] If you don't want git, just delete the .git folder." \
+&& mill shim open "." \
+mill shim open ""$NAME".markdown"
