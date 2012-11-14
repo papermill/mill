@@ -11,7 +11,10 @@
 #
 
 set -e
+
+. $_MILL_ROOT/share/mill/global.functions
 source $_MILL_ROOT/share/mill/local.config
+
 
 DOCNAME="$1"
 URL="$2"

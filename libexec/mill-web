@@ -10,6 +10,10 @@
 
 set -e
 
+. $_MILL_ROOT/share/mill/global.functions
+source $_MILL_ROOT/share/mill/local.config
+
+
 # Find every markdown file and start a loop for it
 echo "[>] Output to WEB ..."
 

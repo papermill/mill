@@ -8,6 +8,10 @@
 #
 
 set -e
+
+. $_MILL_ROOT/share/mill/global.functions
+source $_MILL_ROOT/share/mill/local.config
+
 echo "Updating mill in "$_MILL_ROOT" ..."
 cd $_MILL_ROOT
 git pull -q origin master \
