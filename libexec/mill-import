@@ -23,6 +23,7 @@ echo "[>] Importing "$DOCNAME""
 #     -o "."$DOCNAME".tmp.html" \
 #     "$URL" \
 # && echo "    [!] SUCCESS"
+# TODO: how to get remote filename (-O/-J) from curl so we know which file was fetched?
 
 echo "    [#] Converting "$DOCNAME""
 ~/.cabal/bin/pandoc \
