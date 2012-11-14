@@ -15,6 +15,7 @@ See [papermill](https://github.com/papermill/documentation).
     # the following to ~/.bash_profile:
     eval "$(~/.mill/bin/mill init -)"
 
+(If you want to install it as a developer, see [Extend](#Extend).)
 
 ### Dependencies
 
@@ -74,3 +75,20 @@ These are all the commands:
 ## Extend
 
 `mill` is based on [`sub`](https://github.com/37signals/sub), see their [README](https://github.com/37signals/sub/blob/master/README.md) on how it works.
+
+You should also install from your own fork so you can change the code, test it, commit&push and send a merge request.
+
+    GITHUB_USERNAME="L337hium"
+    git clone "https://github.com/$GITHUB_USERNAME/mill.git" ~/.mill
+    cd ~/.mill
+    git push -u origin master
+    git remote add upstream https://github.com/papermill/mill.git
+
+    # Load mill automatically by adding
+    # the following to ~/.bash_profile:
+    eval "$(~/.mill/bin/mill init -)"
+
+    # The 'update' command will now pull from YOUR fork!
+    # If you want to pull from upstream, do:
+    cd ~/.mill
+    git stash && git pull upstream master && git stash pop
