@@ -11,7 +11,7 @@
 # Stationaries:
 # * Simple
 # * Paper
-# * Thesis
+# * Thesis (not implemented)
 
 set -e
 
@@ -21,9 +21,14 @@ source $_MILL_ROOT/share/mill/local.config
 # # VARS
 
 NAME="$1"
+STATIONERY="$2"
 
-# The default type of stationery is "Paper"
-STATIONERY="Paper"
+# If no stationery was supplied
+if [[ "$STATIONERY" = "" ]]; then
+    # The default type of stationery is "Paper"
+    STATIONERY="Paper"
+fi
+
 
 # # FUNCTIONS
 function get_stationery_from_git()
@@ -32,6 +37,23 @@ function get_stationery_from_git()
     && git clone -q --depth=1 "$STATIONERY_REPO" "$TMPDIR" \
     && cp -R "$TMPDIR"/"$STATIONERY"/ . \
     && mv "Document.markdown" ""$NAME".markdown"
+}
+
+function setup_config()
+{
+    case $STATIONERY in
+        Simple )
+            local file=".papermill"
+        ;;
+        Paper|Thesis )
+            local folder=".papermill"
+            local file=""$folder"/papermill.config"
+            mkdir -p "$folder"
+        ;;
+    esac
+    
+    touch $file \
+    && echo "# Papermill Config" > $file 
 }
 
 function start_new_git_repo()
@@ -47,6 +69,7 @@ function start_new_git_repo()
 echo "[>] Creating new "$STATIONERY" in /"$NAME""
 mkdir "$NAME" && cd "$NAME" \
 && get_stationery_from_git \
+&& setup_config \
 && start_new_git_repo \
 && echo "[<] Started new "$STATIONERY" in /"$NAME"" \
 && echo "[!] If you don't want git, just delete the .git folder." \
