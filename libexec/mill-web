@@ -14,6 +14,8 @@ set -e
 source $_MILL_ROOT/share/mill/local.config
 
 
+# # MAIN
+
 # Find every markdown file and start a loop for it
 echo "[>] Output to WEB ..."
 

@@ -9,22 +9,23 @@
 # Optionally choose a stationery (default is Paper).
 #
 # Stationaries:
-# * Paper
 # * Simple
-#
+# * Paper
+# * Thesis
 
 set -e
 
 . $_MILL_ROOT/share/mill/global.functions
 source $_MILL_ROOT/share/mill/local.config
 
+# # VARS
 
 NAME="$1"
 
-# DEFAULT STATIONERY
+# The default type of stationery is "Paper"
 STATIONERY="Paper"
 
-# FUNCTIONS
+# # FUNCTIONS
 function get_stationery_from_git()
 {
     TMPDIR="$(mktemp -d /tmp/papermill-new.XXXXXX)" \
@@ -41,7 +42,7 @@ function start_new_git_repo()
     && echo "    [#] SUCCESS!"
 }
 
-# MAIN
+# # MAIN
 
 echo "[>] Creating new "$STATIONERY" in /"$NAME""
 mkdir "$NAME" && cd "$NAME" \

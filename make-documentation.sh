@@ -3,7 +3,7 @@
 
 SHOCCO="/usr/local/bin/shocco"
 
-mkdir -p doc
+mkdir -p doc > /dev/null
 
 cd libexec
 

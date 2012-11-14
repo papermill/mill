@@ -1,11 +1,12 @@
 #!/bin/sh
 
-# # MILL SHIM #
-#+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 # Usage: mill shim <nasty hack>
-# Summary: Glue code and/or nasty hacks 'mill' needs to work.
-# Help: Glue code and/or nasty hacks 'mill' needs to work.
+# Summary: Glue code, (platform) abstractions, nasty hacks.
+# Help: Not really a command, but a collection of glue code,
+# (platform) abstractions and/or nasty hacks 'mill' needs to work.
 # It's just a shell script which takes different arguments.
+# (Functions which have earned their place in the project
+# go into `~/.mill/share/mill/global.functions`)
 #
 #   mill shim open <file> -- open file os independent
 #
@@ -23,8 +24,8 @@ source $_MILL_ROOT/share/mill/local.config
 SUBCMD="$1"
 SUBARG1="$2"
 
-#############################################
-# ## SUB-COMMAND FUNCTIONS
+
+# # FUNCTIONS
 
 function shim_open(){
     INPUTFILE="$SUBARG1"
@@ -40,7 +41,7 @@ function shim_open(){
     esac
 }
 
-function shim_pandoc()
+function where_is_pandoc()
 { 
     # find a path to pandoc and `echo` it
     #
@@ -54,14 +55,14 @@ function shim_pandoc()
     done
 }
 
-#############################################
+
 # # SUB-COMMAND LOGIC
 
 case "$SUBCMD" in
     open )
-    shim_open
+	shim_open
 	;;
     pandoc )
-    shim_pandoc
+	where_is_pandoc
 	;;
 esac

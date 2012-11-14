@@ -1,7 +1,5 @@
 #!/bin/sh
 
-# MILL WEB  #
-# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 # Usage: mill web
 # Summary: Output to HTML
 # Help: Use this to output the document to a format suitable for
@@ -13,6 +11,8 @@ set -e
 . $_MILL_ROOT/share/mill/global.functions
 source $_MILL_ROOT/share/mill/local.config
 
+
+# # MAIN
 
 echo "[>] Output to PRINT ..."
 

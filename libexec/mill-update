@@ -1,7 +1,5 @@
 #!/bin/sh
 
-# MILL UPDATE #
-# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 # Usage: mill update
 # Summary: Update mill cli tool from git.
 # Help: Selfupdate which pulls from the repo on github.
@@ -11,6 +9,8 @@ set -e
 
 . $_MILL_ROOT/share/mill/global.functions
 source $_MILL_ROOT/share/mill/local.config
+
+# # MAIN
 
 echo "Updating mill in "$_MILL_ROOT" ..."
 cd $_MILL_ROOT
