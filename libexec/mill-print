@@ -24,7 +24,7 @@ do
     echo "    [#] Generating PDF: $INPUTFILE ..."
     
 	{   
-		~/.cabal/bin/pandoc "$INPUTFILE" \
+		$(mill shim pandoc) "$INPUTFILE" \
 		\
 		--smart \
 		--normalize \

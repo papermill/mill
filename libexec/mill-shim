@@ -41,14 +41,16 @@ function shim_open(){
 }
 
 function shim_pandoc()
-{
+{ 
+    # find a path to pandoc and `echo` it
+    #
     # IF USER HAS SET 'MY_PANDOC' in mill/share/mill/local.config
     if [[ "$MY_PANDOC" != "" ]]; then
-        [[ -e ""$PATH"/pandoc" ]] && ""$PATH"/pandoc" && return
+        [[ -e ""$PATH"/pandoc" ]] && echo ""$PATH"/pandoc" && return
     fi
     # TEST ALL OTHER POSSIBLE PATHS IN ORDER OF PREFERENCE
     for PATH in "~/.papermill/bin" "~/.cabal/bin" "/usr/local/bin" "/usr/bin" ; do
-        [[ -e ""$PATH"/pandoc" ]] && ""$PATH"/pandoc" && return
+        [[ -e ""$PATH"/pandoc" ]] && echo ""$PATH"/pandoc" && return
     done
 }
 

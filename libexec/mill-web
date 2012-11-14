@@ -19,7 +19,7 @@ do
     # Process MARKDOWN Files
     echo "   [#] Generating HTML: $INPUTFILE ..."
 
-	~/.cabal/bin/pandoc "$INPUTFILE" \
+	$(mill shim pandoc) "$INPUTFILE" \
 	--write=html5 --standalone --smart --toc --section-divs --normalize --number-sections \
 	--bibliography="./bibliography.bib" \
 	--csl=".papermill/din-1505-2.csl" \
