@@ -43,7 +43,7 @@ function shim_open(){
 function shim_pandoc()
 {
     # IF USER HAS SET 'MY_PANDOC' in mill/share/mill/local.config
-    if [[ "$MY_PANDOC" != ""]]; then
+    if [[ "$MY_PANDOC" != "" ]]; then
         [[ -e ""$PATH"/pandoc" ]] && ""$PATH"/pandoc" && return
     fi
     # TEST ALL OTHER POSSIBLE PATHS IN ORDER OF PREFERENCE
