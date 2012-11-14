@@ -1,0 +1,37 @@
+#!/bin/sh
+
+# MILL import #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# Usage: mill import <name> "<url>"
+# Summary: Import a document and convert to Markdown.
+# Help: Fetches HTML from the given URL from the net 
+# and converts it to Markdown with 'pandoc'.
+#
+#   mill import Pandoc "http://johnmacfarlane.net/pandoc/README.html"
+#
+
+set -e
+source $_MILL_ROOT/share/mill/local.config
+
+DOCNAME="$1"
+URL="$2"
+
+echo "[>] Importing "$DOCNAME""
+
+# echo "    [#] Fetching "$URL""
+# curl \
+#     -o "."$DOCNAME".tmp.html" \
+#     "$URL" \
+# && echo "    [!] SUCCESS"
+
+echo "    [#] Converting "$DOCNAME""
+~/.cabal/bin/pandoc \
+    -i "$URL" \
+    -o ""$DOCNAME".markdown" \
+    |while read REPLY; do echo "    [#] $REPLY"; done \
+&& echo "    [!] SUCCESS"
+
+echo "[<] Imported "$DOCNAME""
+
+# Open it
+mill shim open ""$DOCNAME".markdown"
