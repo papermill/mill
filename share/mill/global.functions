@@ -14,3 +14,14 @@ mill_find_platform() {
     esac
 }
 mill_find_platform # run it to initiate var
+
+prepare_output_folder()
+{
+    if [[ -e "$OUTPUT_DIR" ]]; then
+        # output folder exists!
+        return
+    else 
+        echo "output folder does not exist"
+        mkdir -p "$OUTPUT_DIR"
+    fi
+}

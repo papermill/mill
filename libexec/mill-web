@@ -17,6 +17,8 @@ source $_MILL_ROOT/share/mill/local.config
 # Find every markdown file and start a loop for it
 echo "[>] Output to WEB ..."
 
+prepare_output_folder
+
 for INPUTFILE in $(find *.markdown -maxdepth 0 -type f -not \( -name "images" \))
 do
 
@@ -29,11 +31,12 @@ do
 	--csl=".papermill/din-1505-2.csl" \
 	--output="$INPUTFILE.generated.html"
 	
-	echo "   [!] Finished processing "$INPUTFILE"..."
 	# END Process MARKDOWN Files
 	
-    # Open the generated Files (OS X only)
-	open -g -a /Applications/Safari.app "$INPUTFILE.generated.html"
+	# If the last operation was successfull, tell it to the user and set the exit status to '0'.
+    OUTPUTFILE=""$OUTPUT_DIR"/"$INPUTFILE".generated.html"
+	    echo "   [!] SUCCESS"
+		mill shim open "$OUTPUTFILE"
 done
 
 echo "[<] Finished output to WEB ..."
