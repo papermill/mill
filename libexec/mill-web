@@ -24,19 +24,28 @@ do
 
     # Process MARKDOWN Files
     echo "   [#] Generating HTML: $INPUTFILE ..."
-
-	$(mill shim pandoc) "$INPUTFILE" \
-	--write=html5 --standalone --smart --toc --section-divs --normalize --number-sections \
-	--bibliography="./bibliography.bib" \
-	--csl=".papermill/din-1505-2.csl" \
-	--output="$INPUTFILE.generated.html"
-	
-	# END Process MARKDOWN Files
-	
-	# If the last operation was successfull, tell it to the user and set the exit status to '0'.
     OUTPUTFILE=""$OUTPUT_DIR"/"$INPUTFILE".generated.html"
+    {
+    	$(mill shim pandoc) "$INPUTFILE" \
+    	--write=html5 --standalone --smart --toc --section-divs --normalize --number-sections \
+    	--bibliography="./bibliography.bib" \
+    	--csl=".papermill/din-1505-2.csl" \
+    	--output="$OUTPUTFILE"
+    } && {
+        # If the last operation was successfull, tell it to the user and set the exit status to '0'.
 	    echo "   [!] SUCCESS"
+        EXIT_STATUS=0
+        # We also try to open the output file
 		mill shim open "$OUTPUTFILE"
+    }
 done
+# END Process MARKDOWN Files
 
 echo "[<] Finished output to WEB ..."
+
+# EXIT with status
+if [[ "$EXIT_STATUS" = "" ]]; then
+    # If no status was set, something is wrong, so we set 1.
+    EXIT_STATUS=1
+fi
+exit $EXIT_STATUS

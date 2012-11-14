@@ -21,10 +21,6 @@ prepare_output_folder
 # Find every Markdown file and start a loop for it
 for INPUTFILE in $(find *.markdown -maxdepth 0 -type f -not \( -name "images" \))
 do
-
-    # Generate PDF Files
-	cd "$BASE_DIR"
-    
     echo "    [#] Generating PDF: $INPUTFILE ..."
     
 	{   
@@ -55,6 +51,7 @@ do
 
 	} && {
 	    echo "   [!] SUCCESS"
+        EXIT_STATUS=0
 		mill shim open ""$OUTPUT_DIR"/"$INPUTFILE"-output.pdf"
 	}    
 	
@@ -69,3 +66,10 @@ for TMPFILE in "_After-Title.generated.latex", *"_Impressum.generated.latex", "V
 do \
     [[ -e "$TMPFILE" ]] && rm -rf "$TMPFILE"
 done
+
+# EXIT with status
+if [[ "$EXIT_STATUS" = "" ]]; then
+    # If no status was set, something is wrong, so we set 1.
+    EXIT_STATUS=1
+fi
+exit $EXIT_STATUS
