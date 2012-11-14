@@ -21,20 +21,29 @@ NAME="$1"
 # DEFAULT STATIONERY
 STATIONERY="Paper"
 
+# FUNCTIONS
+function get_stationery_from_git()
+{
+    TMPDIR="$(mktemp -d /tmp/papermill-new.XXXXXX)" \
+    && git clone -q --depth=1 "$STATIONERY_REPO" "$TMPDIR" \
+    && cp -R "$TMPDIR"/"$STATIONERY"/ . \
+    && mv "Document.markdown" ""$NAME".markdown"
+}
+
+function start_new_git_repo()
+{
+    git init -q \
+    && git add --all \
+    && git commit -m "Starting $NAME" |while read REPLY; do echo "    [#] $REPLY"; done \
+    && echo "    [#] SUCCESS!"
+}
+
+# MAIN
+
 echo "[>] Creating new "$STATIONERY" in /"$NAME""
-
-# TODO: clone to tmp dir, just move stuff from sub-dir
-
-git clone -q --depth=1 "$STATIONERY_REPO" "$NAME" \
-&& cd "$NAME/$STATIONERY" \
-&& mv "Document.markdown" ""$NAME".markdown" \
-&& cd .. \
-&& mv "$STATIONERY"/* . \
-&& rm -rf ".git" "README.md" "Simple" "Paper" \
-&& git init -q \
-&& git add --all \
-&& git commit -m "Starting $NAME" |while read REPLY; do echo "    [#] $REPLY"; done \
-&& echo "    [#] SUCCESS!" \
+mkdir "$NAME" && cd "$NAME" \
+&& get_stationery_from_git \
+&& start_new_git_repo \
 && echo "[<] Started new "$STATIONERY" in /"$NAME"" \
 && echo "[!] If you don't want git, just delete the .git folder." \
 && mill shim open "." \
