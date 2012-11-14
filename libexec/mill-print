@@ -19,7 +19,7 @@ echo "[>] Output to PRINT ..."
 prepare_output_folder
 
 # Find every Markdown file and start a loop for it
-for INPUTFILE in $(find *.markdown -maxdepth 0 -type f -not \( -name "images" \))
+for INPUTFILE in $(find *.markdown -maxdepth 0 -type f -not \( -name "output" \))
 do
     echo "    [#] Generating PDF: $INPUTFILE ..."
     

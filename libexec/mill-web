@@ -19,7 +19,7 @@ echo "[>] Output to WEB ..."
 
 prepare_output_folder
 
-for INPUTFILE in $(find *.markdown -maxdepth 0 -type f -not \( -name "images" \))
+for INPUTFILE in $(find *.markdown -maxdepth 0 -type f -not \( -name "output" \))
 do
 
     # Process MARKDOWN Files
