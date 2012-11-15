@@ -1,0 +1,152 @@
+#!/bin/sh
+
+# Usage: mill check 
+# Summary: Check if something is working.
+# Help: .
+#
+
+
+set -e
+
+. $_MILL_ROOT/share/mill/global.functions
+
+
+# # VARS
+
+SUBCMD="$1"
+
+
+# # SUB-COMMAND FUNCTIONS
+#
+# are called by a sub command; have to set $EXIT_STATUS.
+
+function check_self()
+{
+    TMP_DIR="$(mktemp -d /tmp/papermill-check.XXXXXX)" \
+    && cd "$TMP_DIR" \
+    || echo "Could not even create the tempory folder for running the check.  m("
+    
+    # Start self-check
+    # (We have to disable gitlab support to not spam your account)
+    GITLAB_TMPSTATUS="$GITLAB" && export GITLAB="no"
+    (mill new "A-Paper" >/dev/null) && echo "NEW PROJECT WORKS" || STATUS=1
+    cd "A-Paper"
+    (mill web >/dev/null) && echo "HTML OUTPUT WORKS" || STATUS=1
+    (mill print >/dev/null) && echo "PDF OUTPUT WORKS" || STATUS=1
+
+    
+    # Wait 10 seconds, then clean up (in the background)
+    {
+        sleep 10
+        rm -rf "$TMP_DIR"
+        # (Reset gitlab support)
+        GITLAB="$GITLAB_TMPSTATUS"
+    } &
+
+}
+
+function check_gitlab()
+{
+    if [[ "$GITLAB" = "yes" ]] ; then 
+        # If Gitlab is enabled, we run the check! 
+        echo "[Y] Gitlab is enabled!"
+        
+        # Check if we have a gitlab URL
+        if [[ "$GITLAB_URL" = "" ]]; then
+            # If there is no token, bail out.
+            echo "    [X] No gitlab URL found!"
+            STATUS=1 && return
+        fi      
+        
+        # Check if we have an API token
+        if [[ "$GITLAB_API_TOKEN" = "" ]]; then
+            # If there is no token, bail out.
+            echo "    [X] No API token found!"
+            STATUS=1 && return
+        fi
+        
+        echo "    [#] Connecting to \"$GITLAB_URL/api/v$GITLAB_APIV/\" using token \"$GITLAB_API_TOKEN\""
+        GITLAB_USER_RESPONSE="$(curl --silent \
+            -H "Content-Type: application/json" \
+            -X GET \
+            "$GITLAB_URL/api/v$GITLAB_APIV/user?private_token=$GITLAB_API_TOKEN")"
+        
+        #echo "$GITLAB_USER_RESPONSE"
+        
+        # Check if we got a 404 from the server
+        if ( echo "$GITLAB_USER_RESPONSE" | grep -q "<h1>404</h1>" ) ; then
+            echo "    [X] Error 404 from server"
+            STATUS=1 && return
+        fi
+        
+        # Check if we got back valid JSON from the API. TODO: Fix it        
+        if ( (echo "$GITLAB_USER_RESPONSE" | jq '.') | grep -q "parse error" ) ; then
+            echo "    [X] Did not get a valid response from the API. We got:"
+            echo "$GITLAB_USER_RESPONSE"
+            STATUS=1 && return
+        fi
+        
+        GITLAB_USER_STATUS="$(echo "$GITLAB_USER_RESPONSE" | jq ".blocked")"
+        GITLAB_USER_NAME="$(echo "$GITLAB_USER_RESPONSE" | jq ".name")"
+        GITLAB_USER_ID="$(echo "$GITLAB_USER_RESPONSE" | jq ".id")"
+        GITLAB_USER_INFO="$(echo "    [-] Account: $GITLAB_USER_NAME (ID #$GITLAB_USER_ID)")"
+    
+        case "$GITLAB_USER_STATUS" in
+            false )
+                STATUS=0
+                echo "    [Y] Everything OK!"
+                echo "$GITLAB_USER_INFO" 
+            ;;
+            true )
+                STATUS=1
+                echo "    [X] Connection is OK, but your account is blocked!"
+                echo "$GITLAB_USER_INFO" 
+            ;;
+            null )
+                STATUS=1
+                echo "    [X] Did get valid response from API, but did not understand it! We got:"
+                echo "$GITLAB_USER_RESPONSE" 
+            ;;
+        esac
+    
+    else 
+        # If Gitlab is not enabled, there is nothing to check! 
+        STATUS=0
+        echo "Gitlab is NOT enabled!"
+    fi
+}
+
+function no_subcommand_message()
+{
+    echo "Use this command to check if stuff is working."
+    echo "Supported stuff:"
+    echo "[self]    run a self check in /tmp"
+    echo "[gitlab]  check if gitlab is set up correctly"
+}
+
+
+# # SUB-COMMAND LOGIC
+
+case "$SUBCMD" in
+    gitlab )
+    	check_gitlab
+	;;
+    self )
+    	check_self
+	;;
+    *)
+    	no_subcommand_message
+	;;
+esac
+    
+# # Feedback
+echo ""
+if [[ $STATUS = 1 ]]; then
+    echo "[!] Something went wrong.  :("
+else
+    echo "[<] It seems that everything is OK.  :)"
+fi
+      
+# # EXIT with STATUS
+EXIT_STATUS="$STATUS"
+    

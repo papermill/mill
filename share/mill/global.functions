@@ -34,5 +34,17 @@ prepare_output_folder()
 # $PLATFORM is set by a function.
 mill_find_platform 
 
-M_USER_CONFIG="$_MILL_ROOT/share/mill/user.config"
 M_LOCAL_CONFIG="$_MILL_ROOT/share/mill/local.config"
+M_USER_CONFIG="$_MILL_ROOT/share/mill/user.config"
+
+# ## Read the configuration
+
+# ### First, the local config of the `mill` tool
+. "$M_LOCAL_CONFIG"
+
+# ### Next, the user config of the `mill` tool
+. "$M_USER_CONFIG"
+
+if [[ "$_MILL_GITLAB_API_TOKEN" != "" ]]; then
+    GITLAB_API_TOKEN="$_MILL_GITLAB_API_TOKEN"
+fi
