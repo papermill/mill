@@ -1,6 +1,9 @@
 #!/bin/sh
 
-# Unused
+# Summary: Global helper functions and variables
+
+
+# Find the platform (Mac or Linux)
 mill_find_platform() {
     # FIND THE PLATFORM
     # : "Mac", "Linux"
@@ -13,7 +16,6 @@ mill_find_platform() {
 	PLATFORM="Linux"
     esac
 }
-mill_find_platform # run it to initiate var
 
 prepare_output_folder()
 {
@@ -25,3 +27,12 @@ prepare_output_folder()
         mkdir -p "$OUTPUT_DIR"
     fi
 }
+
+
+# Helper variables
+
+# $PLATFORM is set by a function.
+mill_find_platform 
+
+M_USER_CONFIG="$_MILL_ROOT/share/mill/user.config"
+M_LOCAL_CONFIG="$_MILL_ROOT/share/mill/local.config"
