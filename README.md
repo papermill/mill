@@ -49,10 +49,22 @@ A small walktrough testing if everything works:
 
 *There is no master plan on how to approach this yet.* 
 
-Right now we just use 2 config files with Shell variables:
+Right now we just use config files with Shell variables. They are read in the order listed here, so more specific settings will override general ones. 
+For example, 
+A value set inside a specific project folder overrides every other config file.
 
- - `local.config`: Installation-wide config. Stuff like default language. Is used per-user or system-wide depending on where `mill` is installed, e.g. `~/.mill` or `/usr/local/bin/mill`.
- - `papermill.config`: Config inside a document repository. Overides `local.config`. For flexibility, it can be in the following different places (sourced in that order, so if a variable conflicts it is overriden by the file in the location late in the list):
+- Local (system) config for `papermill`: `/etc/papermill/papermill.config`
+
+- User config for 'papermill': `$HOME/.papermill`
+
+- Local (system) config: `~/.mill/share/mill/local.config`
+   * `mill`'s "under the hood" settings
+
+- User config: `~/.mill/share/mill/user.config`
+   * **is used as a template for every new project** which will get created
+   * contains settings that should be changed by the user according to their personal taste
+
+- `papermill.config`:**(NOT IMPLEMENTED)** Config inside a document repository. Overides `local.config`. For flexibility, it can be in the following different places (sourced in that order, so if a variable conflicts it is overriden by the file in the location late in the list):
    * `⟨Your Document⟩/.papermill` *(hidden file)*
    * `⟨Your Document⟩/.papermill/papermill.config` *(in hidden folder)*
    * `⟨Your Document⟩/papermill.config`

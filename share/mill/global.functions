@@ -29,22 +29,41 @@ prepare_output_folder()
 }
 
 
-# Helper variables
+# # Variables
 
-# $PLATFORM is set by a function.
+# `$PLATFORM` is set by running this function:
 mill_find_platform 
 
+# ## Configuration
+
+# ### List config
+
+# - Local (system) config for `papermill`
+PM_LOCAL_CONFIG="/etc/papermill/papermill.config"
+
+# - User config for 'papermill'
+PM_USER_CONFIG="$HOME/.papermill"
+
+# - Local (system) config of the `mill` tool
 M_LOCAL_CONFIG="$_MILL_ROOT/share/mill/local.config"
+
+# - User config of the `mill` tool
 M_USER_CONFIG="$_MILL_ROOT/share/mill/user.config"
 
-# ## Read the configuration
+# We create a list of possible configs in that order. 
+CONFIGURATION_LIST="$PM_LOCAL_CONFIG $PM_USER_CONFIG $M_LOCAL_CONFIG $M_USER_CONFIG"
 
-# ### First, the local config of the `mill` tool
-. "$M_LOCAL_CONFIG"
+# ### Read config
 
-# ### Next, the user config of the `mill` tool
-. "$M_USER_CONFIG"
+# Now we run a loop for each (possible) config file.
+for CONFIGURATION in $CONFIGURATION_LIST
+do
+    # We check if the config file exists, 
+    if [[ -e "$CONFIGURATION" ]]; then
+        
+        # if it does, we load it.
+        . "$CONFIGURATION"
+    fi # End check for config file
+done # End loop for config file
 
-if [[ "$_MILL_GITLAB_API_TOKEN" != "" ]]; then
-    GITLAB_API_TOKEN="$_MILL_GITLAB_API_TOKEN"
-fi
+# Here endeth the setup of global functions and variables. Ready to mill.
