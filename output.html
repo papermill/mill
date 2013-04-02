@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>mill **output**</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <link rel="stylesheet" media="all" href="public/stylesheets/normalize.css" />
+  <link rel="stylesheet" media="all" href="docco.css" />
+</head>
+<body>
+  <div class="container">
+    <div class="page">
+
+      <div class="header">
+        
+          
+          <h1>mill <strong>output</strong></h1>
+<blockquote>
+<p>renders a papermill project for print or web</p>
+</blockquote>
+<hr>
+
+          
+        
+
+        
+          <div class="toc">
+            <h3>Table of Contents</h3>
+            <ol>
+              
+                
+                <li>
+                  <a class="source" href="create.html">
+                    create.js
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="output.html">
+                    output.js
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="mill.html">
+                    mill.js
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="mill-cli.html">
+                    mill-cli.js
+                  </a>
+                </li>
+              
+            </ol>
+          </div>
+        
+      </div>
+
+      
+        
+        <p>Variables setup</p>
+<ul>
+<li>we require our own <code>mill</code> library</li>
+</ul>
+
+        
+          <div class='highlight'><pre><span class="keyword">var</span> mill = require(<span class="string">'../../mill-cli'</span>),</pre></div>
+        
+      
+        
+        <ul>
+<li>we export ourselves as CommonJS module</li>
+</ul>
+
+        
+          <div class='highlight'><pre>    output = exports;</pre></div>
+        
+      
+        
+        <h1>Usage</h1>
+<p>define usage information for this command</p>
+
+        
+          <div class='highlight'><pre>output.usage= [
+  <span class="string">'Renders a papermill project according to settings.'</span>,
+  <span class="string">'Can export to PDF (print) and HTML (web)'</span>,
+  <span class="string">''</span>,
+  <span class="string">'Usage: mill output &lt;project&gt; [--format]'</span>
+  <span class="string">''</span>,
+  <span class="string">'Example usages:'</span>,
+  <span class="string">'mill print'</span>  
+  <span class="string">'mill output --print &lt;/path/to/project&gt;'</span>  
+  <span class="string">'mill web'</span>  
+  <span class="string">'mill output --web .'</span>  
+];</pre></div>
+        
+      
+        
+        <h1>Workflow: <strong>output</strong></h1>
+<p>use <a href="http://gruntjs.com/configuring-tasks"><code>grunt</code></a> ?</p>
+<ul>
+<li><p>get working directory</p>
+</li>
+<li><p>get papermill project config for working directory</p>
+</li>
+<li><p>read files from working directory</p>
+</li>
+<li><p>recurse into all all sub-folders</p>
+</li>
+</ul>
+
+        
+      
+      <div class="fleur">h</div>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>mill **new**</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <link rel="stylesheet" media="all" href="public/stylesheets/normalize.css" />
+  <link rel="stylesheet" media="all" href="docco.css" />
+</head>
+<body>
+  <div class="container">
+    <div class="page">
+
+      <div class="header">
+        
+          
+          <h1>mill <strong>new</strong></h1>
+<blockquote>
+<p>Create and set up a new project.</p>
+</blockquote>
+<hr>
+
+          
+        
+
+        
+          <div class="toc">
+            <h3>Table of Contents</h3>
+            <ol>
+              
+                
+                <li>
+                  <a class="source" href="create.html">
+                    create.js
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="output.html">
+                    output.js
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="mill.html">
+                    mill.js
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="mill-cli.html">
+                    mill-cli.js
+                  </a>
+                </li>
+              
+            </ol>
+          </div>
+        
+      </div>
+
+      
+        
+        <h2>Usage Information</h2>
+<p>This is displayed when the user requests help on this command.</p>
+
+        
+          <div class='highlight'><pre>create.usage = [
+  <span class="string">'Create a new writing project with the name you choose'</span>,
+  <span class="string">'and some content to get you started.'</span>,
+  <span class="string">'Optionally choose a stationery (default is Paper).'</span>,
+  <span class="string">''</span>,
+  <span class="string">'Available stationaries:'</span>,
+  <span class="string">'* Simple'</span>,
+  <span class="string">'* Paper'</span>,
+  <span class="string">''</span>,
+  <span class="string">'Usage: mill create &lt;NAME&gt; [&lt;stationery&gt;]'</span>,
+  <span class="string">''</span>,
+  <span class="string">'Example usages:'</span>,
+  <span class="string">'mill new "Lorem Ipsum"'</span>,
+  <span class="string">'mill new "Comparative Lorem Ipsum" paper'</span>  
+];</pre></div>
+        
+      
+        
+        <h2>Workflow: <strong>create</strong></h2>
+<p>The whole command workflow lies in 1 main function,
+which we also export as a module;</p>
+
+        
+          <div class='highlight'><pre>module.exports = create;</pre></div>
+        
+      
+        
+        <p>this function gets called by the cli app when the user runs the <strong>create</strong> command.</p>
+
+        
+          <div class='highlight'><pre><span class="function"><span class="keyword">function</span> <span class="title">create</span> <span class="params">(argument, callback)</span> {</span></pre></div>
+        
+      
+        
+        <p>Our context is set to the application, we save it in a variable for convenience.</p>
+
+        
+          <div class='highlight'><pre>  <span class="keyword">var</span> app = <span class="keyword">this</span>;</pre></div>
+        
+      
+        
+        <p>Testing the command chain with argument.</p>
+
+        
+          <div class='highlight'><pre>  mill.log.debug(<span class="string">"Hello "</span> + argument + <span class="string">"!"</span>);</pre></div>
+        
+      
+        
+        <ul>
+<li>get the stationery url<ul>
+<li>maybe user has config</li>
+<li>if not, use default</li>
+</ul>
+</li>
+</ul>
+<p>var stationery = {};
+stationery.name = mill.config.stationery_name || &quot;Paper&quot;;
+<code>stationery.url</code> defines the location and the protocol of the stationery source
+- protocol: <code>HTTP(S)</code> or <code>git</code>. When using git over HTTP, URL has to end in .git
+- stationery is fetched according to the determined protocoll
+stationery.url = mill.config.stationery_url || &quot;<a href="https://github.com/papermill/stationery.git">https://github.com/papermill/stationery.git</a>&quot;;</p>
+<ul>
+<li>fetch the stationery from url
+fetch(stationery.url, function(err, res, body){
+if (stationery.url ) {};
+});</li>
+</ul>
+
+        
+          <div class='highlight'><pre>  
+  
+  callback();
+};</pre></div>
+        
+      
+      <div class="fleur">h</div>
+    </div>
+  </div>
+</body>
+</html>

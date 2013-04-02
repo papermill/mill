@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>mill-cli.js</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <link rel="stylesheet" media="all" href="public/stylesheets/normalize.css" />
+  <link rel="stylesheet" media="all" href="docco.css" />
+</head>
+<body>
+  <div class="container">
+    <div class="page">
+
+      <div class="header">
+        
+          <h1>mill-cli.js</h1>
+        
+
+        
+          <div class="toc">
+            <h3>Table of Contents</h3>
+            <ol>
+              
+                
+                <li>
+                  <a class="source" href="create.html">
+                    create.js
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="output.html">
+                    output.js
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="mill.html">
+                    mill.js
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="mill-cli.html">
+                    mill-cli.js
+                  </a>
+                </li>
+              
+            </ol>
+          </div>
+        
+      </div>
+
+      
+        
+        
+        
+          <div class='highlight'><pre><span class="keyword">var</span></pre></div>
+        
+      
+        
+        <p>This is the application running as <code>mill</code> command line interface.
+It is directly <strong>require()</strong>d and <strong>start()</strong>ed by the <code>./bin/mill</code> stub.</p>
+<p>The stub is the only &#39;real&#39; shell script in this project. That means it is the
+only file directly called by the operating system. 
+That is also the reason it needs a &quot;hashbang&quot; as it&#39;s first line.</p>
+<p>Condensed to its main functionality, the stub looks like this 
+<small>(and btw it is just copied from <a href="https://github.com/nodejitsu/jitsu/blob/master/bin/jitsu">jitsu&#39;s cli</a>)</small>:</p>
+<pre><code class="lang-js">#!/usr/bin/env node
+
+var mill = require(&#39;../mill-cli.js&#39;);
+
+mill.start(function (err) {
+  process.exit(err ? 1 : 0);
+});</code></pre>
+<hr>
+<p>First, we need to <strong>require()</strong> some modules from:</p>
+<ul>
+<li>the <code>node.js</code> core<ul>
+<li><em>path</em> for working with paths</li>
+</ul>
+</li>
+</ul>
+
+        
+          <div class='highlight'><pre>path = require(<span class="string">'path'</span>),</pre></div>
+        
+      
+        
+        <ul>
+<li>the npm registry (these need to be declared as dependencies in <code>package.json</code>, so they will be <strong>install</strong>ed by <code>npm</code>)<ul>
+<li>the <em>flatiron</em> anti-framework </li>
+</ul>
+</li>
+</ul>
+
+        
+          <div class='highlight'><pre>    flatiron = require(<span class="string">'flatiron'</span>);</pre></div>
+        
+      
+        
+        <ul>
+<li>(some modules will be built in) </li>
+</ul>
+
+        
+          <div class='highlight'><pre>    
+<span class="keyword">var</span> app = mill = module.exports = flatiron.app;
+
+app.config.file({ file: path.join(__dirname, <span class="string">'config'</span>, <span class="string">'config.json'</span>) });
+
+app.use(flatiron.plugins.cli, {
+  source: path.join(__dirname, <span class="string">'lib'</span>, <span class="string">'commands'</span>),</pre></div>
+        
+      
+        
+        <h1>Usage</h1>
+
+        
+      
+        
+        <p>The &#39;usage&#39; information will be show when no (valid) command was given.</p>
+
+        
+          <div class='highlight'><pre>  <span class="string">"notFoundUsage"</span>: <span class="literal">true</span>,</pre></div>
+        
+      
+        
+        <p>It is an array of strings, which will be seperated by line breaks.</p>
+
+        
+          <div class='highlight'><pre>  usage: [
+    <span class="string">'              _   _  '</span>,
+    <span class="string">'          o  | | | | '</span>,
+    <span class="string">'_  _  _      | | | | '</span>,
+    <span class="string">' |/ |/ |  |  |/  |/  '</span>,
+    <span class="string">' |  |  |_/|_/|__/|__/'</span>,
+    <span class="string">''</span>,
+    <span class="string">'Commands:'</span>,
+    <span class="string">'mill new "Project Title" [-s paper|simple]     Setup a new project'</span>,
+    <span class="string">'mill print [/path/to/project]                  Output project to PDF'</span>,
+    <span class="string">'mill web [/path/to/project]                    Output project to HTML'</span>,
+    <span class="string">'mill help &lt;command&gt;                            Show more help'</span>,
+    <span class="string">''</span>
+  ],
+});</pre></div>
+        
+      
+        
+        <p>mill.start();</p>
+<p>mill.log.debug(__dirname);</p>
+
+        
+      
+      <div class="fleur">h</div>
+    </div>
+  </div>
+</body>
+</html>

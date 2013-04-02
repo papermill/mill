@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>completion.js</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+  <link rel="stylesheet" media="all" href="docco.css" />
+</head>
+<body>
+  <div id="container">
+    <div id="background"></div>
+    
+      <ul id="jump_to">
+        <li>
+          <a class="large" href="javascript:void(0);">Jump To &hellip;</a>
+          <a class="small" href="javascript:void(0);">+</a>
+          <div id="jump_wrapper">
+          <div id="jump_page">
+            
+              
+              <a class="source" href="create.html">
+                create.js
+              </a>
+            
+              
+              <a class="source" href="output.html">
+                output.js
+              </a>
+            
+              
+              <a class="source" href="completion.html">
+                completion.js
+              </a>
+            
+              
+              <a class="source" href="mill.html">
+                mill.js
+              </a>
+            
+          </div>
+        </li>
+      </ul>
+    
+    <ul class="sections">
+        
+          <li id="title">
+              <div class="annotation">
+                  <h1>completion.js</h1>
+              </div>
+          </li>
+        
+        
+        
+        <li id="section-1">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-1">&#182;</a>
+              </div>
+              
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>#!<span class="regexp">/usr/</span>bin/env node</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-2">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+              <p>pasted from <a href="https://raw.github.com/nodejitsu/jitsu/master/lib/jitsu/completion.js">https://raw.github.com/nodejitsu/jitsu/master/lib/jitsu/completion.js</a></p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="comment">/**
+ * completion.js: Bash completion for jitsu
+ * (C) 2010, Nodejitsu Inc.
+ */</span>
+
+<span class="keyword">if</span> (process.platform === <span class="string">'win32'</span>) {
+  <span class="keyword">return</span>;
+}
+
+<span class="keyword">var</span> fs = require(<span class="string">'fs'</span>);
+
+<span class="keyword">var</span> complete = require(<span class="string">'complete'</span>),
+    output = complete.output;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-3">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-3">&#182;</a>
+              </div>
+              <p>(dynamic completion omitted)</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="comment">/**
+ * Dynamic Completion Switch
+ */</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-4">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-4">&#182;</a>
+              </div>
+              <p>FIXME: rename
+if (!process.env.JITSU_COMPLETION) {</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="keyword">var</span> echo = { apps: {}, app: {}, env: {}, db: {} };</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-5">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-5">&#182;</a>
+              </div>
+              <p>}</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="comment">/**
+ * Caching
+ */</span>
+
+<span class="keyword">var</span> cache = {
+  file: <span class="string">'/tmp/.jitsu-completion'</span>,
+  time: <span class="number">2</span> * <span class="number">60</span> * <span class="number">1000</span>,
+  read: <span class="function"><span class="keyword">function</span> <span class="params">(name)</span> {</span>
+    <span class="keyword">var</span> mtime, data;
+
+    <span class="keyword">try</span> {
+      mtime = +fs.statSync(cache.file).mtime;
+    } <span class="keyword">catch</span> (e) {
+      <span class="keyword">return</span>;
+    }
+
+    <span class="keyword">if</span> (mtime &lt; <span class="keyword">new</span> Date - cache.time) {
+      <span class="keyword">return</span> fs.unlinkSync(cache.file);
+    }
+
+    <span class="keyword">try</span> {
+      data = JSON.parse(fs.readFileSync(cache.file, <span class="string">'utf8'</span>));
+      <span class="keyword">return</span> name ? data[name] : data;
+    } <span class="keyword">catch</span> (e) {
+      <span class="keyword">return</span>;
+    }
+  },
+  write: <span class="function"><span class="keyword">function</span> <span class="params">(name, data)</span> {</span>
+    <span class="keyword">var</span> data = data || {},
+        stale = cache.read() || {};
+
+    stale[name] = data;
+
+    <span class="keyword">try</span> {
+      stale = JSON.stringify(stale);
+      fs.writeFileSync(cache.file, stale);
+    } <span class="keyword">catch</span> (e) {
+      ;
+    }
+  }
+};
+
+<span class="comment">/**
+ * Lazy Loading
+ */</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-6">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-6">&#182;</a>
+              </div>
+              <p>function jitsu() {
+  if (!jitsu.module) {
+    jitsu.module = require(&#39;../../&#39;);
+    jitsu.module.setup(function () {});
+  }</p>
+<p>  return jitsu.module;
+}</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="comment">/**
+ * Commands
+ */</span>
+
+<span class="keyword">var</span> commands = {
+  <span class="string">'apps'</span>: {
+    <span class="string">'create'</span>: {},
+    <span class="string">'list'</span>: {},
+    <span class="string">'deploy'</span>: {},
+    <span class="string">'view'</span>: echo.apps,
+    <span class="string">'update'</span>: echo.apps,
+    <span class="string">'destroy'</span>: echo.apps,
+    <span class="string">'start'</span>: echo.apps,
+    <span class="string">'restart'</span>: echo.apps,
+    <span class="string">'stop'</span>: echo.apps
+  },
+
+  <span class="string">'databases'</span>: {
+    <span class="string">'create'</span>: <span class="function"><span class="keyword">function</span> <span class="params">(words, prev, cur)</span> {</span>
+      <span class="keyword">var</span> types = [<span class="string">'couch'</span>, <span class="string">'redis'</span>, <span class="string">'mongo'</span>],
+          last = words[words.length-<span class="number">3</span>];
+
+      <span class="keyword">if</span> (~types.indexOf(prev) || last === <span class="string">'create'</span>) {
+        echo.db(words, prev, cur);
+      } <span class="keyword">else</span> {
+        output(cur, types);
+      }
+    },
+    <span class="string">'list'</span>: {},
+    <span class="string">'get'</span>: echo.db,
+    <span class="string">'destroy'</span>: <span class="function"><span class="keyword">function</span> <span class="params">(words, prev, cur)</span> {</span>
+      <span class="keyword">return</span> echo.db(words, prev, cur);
+    }
+  },
+
+  <span class="string">'env'</span>: {
+    <span class="string">'list'</span>: echo.apps,
+    <span class="string">'set'</span>: <span class="function"><span class="keyword">function</span> <span class="params">(words, prev, cur)</span> {</span>
+      <span class="keyword">if</span> (prev !== <span class="string">'set'</span>) <span class="keyword">return</span>;
+      <span class="keyword">return</span> echo.env(words, prev, cur);
+    },
+    <span class="string">'get'</span>: <span class="function"><span class="keyword">function</span> <span class="params">(words, prev, cur)</span> {</span>
+      <span class="keyword">if</span> (prev !== <span class="string">'get'</span>) <span class="keyword">return</span>;
+      <span class="keyword">return</span> echo.env(words, prev, cur);
+    },
+    <span class="string">'delete'</span>: <span class="function"><span class="keyword">function</span> <span class="params">(words, prev, cur)</span> {</span>
+      <span class="keyword">if</span> (prev !== <span class="string">'delete'</span>) <span class="keyword">return</span>;
+      <span class="keyword">return</span> echo.env(words, prev, cur);
+    },
+    <span class="string">'clear'</span>: {}
+  },
+
+  <span class="string">'install'</span>: {},
+
+  <span class="string">'logs'</span>: {
+    <span class="string">'all'</span>: {},
+    <span class="string">'app'</span>: <span class="function"><span class="keyword">function</span> <span class="params">(words, prev, cur)</span> {</span>
+      <span class="keyword">if</span> (prev !== <span class="string">'app'</span>) <span class="keyword">return</span>;
+      <span class="keyword">return</span> echo.apps(words, prev, cur);
+    }
+  },
+
+  <span class="string">'package'</span>: {
+    <span class="string">'create'</span>: {}
+  },
+
+  <span class="string">'snapshots'</span>: {
+    <span class="string">'create'</span>: {},
+    <span class="string">'list'</span>: echo.apps,
+    <span class="string">'activate'</span>: echo.apps,
+    <span class="string">'destroy'</span>: echo.apps
+  },
+
+  <span class="string">'users'</span>: {
+    <span class="string">'confirm'</span>: <span class="function"><span class="keyword">function</span> <span class="params">(words, prev, cur)</span> {</span>
+      <span class="keyword">var</span> username = jitsu().config.get(<span class="string">'username'</span>) || <span class="string">''</span>;
+      output(cur, [username]);
+    }
+  },
+
+  <span class="string">'wizard'</span>: {},
+  <span class="string">'whoami'</span>: {},
+
+  <span class="string">'help'</span>: {
+    <span class="string">'apps'</span>: {},
+    <span class="string">'databases'</span>: {},
+    <span class="string">'env'</span>: {},
+    <span class="string">'install'</span>: {},
+    <span class="string">'logs'</span>: {},
+    <span class="string">'package'</span>: {},
+    <span class="string">'snapshots'</span>: {},
+    <span class="string">'users'</span>: {},
+    <span class="string">'wizard'</span>: {}
+  },
+
+  <span class="string">'signup'</span>: {},
+  <span class="string">'login'</span>: {},
+  <span class="string">'logout'</span>: {},
+  <span class="string">'deploy'</span>: {},
+  <span class="string">'conf'</span>: {}
+};
+
+<span class="keyword">var</span> options = {
+  <span class="string">'--version'</span>: {},
+  <span class="string">'-v'</span>: {},
+  <span class="string">'--localconf'</span>: {},
+  <span class="string">'--jitsuconf'</span>: {},
+  <span class="string">'-j'</span>: {},
+  <span class="string">'--noanalyze'</span>: {},
+  <span class="string">'--colors'</span>: {},
+  <span class="string">'--release'</span>: {},
+  <span class="string">'-r'</span>: {},
+  <span class="string">'--raw'</span>: {},
+  <span class="string">'-c'</span>: {},
+  <span class="string">'--confirm'</span>: {}
+};
+
+<span class="comment">/**
+ * Aliases
+ */</span>
+
+commands.db = commands.databases;
+
+<span class="comment">/**
+ * Execute
+ */</span>
+
+complete({
+  program: <span class="string">'mill'</span>,
+  commands: commands,
+  options: options
+});</pre></div></div>
+            
+        </li>
+        
+    </ul>
+  </div>
+</body>
+</html>
