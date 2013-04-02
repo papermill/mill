@@ -3,11 +3,11 @@
 // TODO: what is the best way to do CLIs in node???
 // this stub is taken from <https://github.com/nodejitsu/jitsu/blob/master/bin/jitsu>
 
-// fancy bash completion
-//require('../lib/completion.js');
+// fancy bash completion (not implemented)
+// require('../lib/completion.js');
 
 // require myself
-var mill = require('../mill.js');
+var mill = require('../mill-cli.js');
 
 mill.start(function (err) {
   

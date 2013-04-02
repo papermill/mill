@@ -102,7 +102,9 @@ For example, a value set inside a specific project folder overrides every other 
     - web service users <https://github.com/flatiron/cli-users>
     - native desktop apps: <http://appjs.org>
     - remote repl: <https://github.com/bmeck/flatiron-repl>, <https://npmjs.org/package/repl-client>
-    
+
+---
+
 # TMP
 
 ## Git providers
@@ -115,4 +117,20 @@ For example, a value set inside a specific project folder overrides every other 
 - save it somewhere in the [config](#configuration)
 - If you don't want to save it there, put it in the `env`.  
     `export GITLAB_API_TOKEN="sUp3R1337sEkr3tz"`
+
+
+## Git Hooks
+
+The following is a valid git hook (a simple shell script).
+To run the hook after each commit, copy it to ``/path/to/project/.git/hooks/post-commit`.`
+
+    #!/bin/sh
+    mill output
+
+
+
+
+
+---
+
 
