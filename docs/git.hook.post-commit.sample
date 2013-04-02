@@ -1,0 +1,5 @@
+#!/bin/sh
+
+# To install this hook, copy it to /path/to/project/.git/hooks/post-commit
+
+mill output

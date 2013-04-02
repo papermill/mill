@@ -1,1 +1,22 @@
-../libexec/mill
+#!/usr/bin/env node
+
+// TODO: what is the best way to do CLIs in node???
+// this stub is taken from <https://github.com/nodejitsu/jitsu/blob/master/bin/jitsu>
+
+// fancy bash completion
+//require('../lib/completion.js');
+
+// require myself
+var mill = require('../mill.js');
+
+mill.start(function (err) {
+  
+  // This is the called back after the app has run.
+  // We just exit and debug-log, but sligthly different depending if there was an error or not.
+  
+  // Debug log output ("OK" or "NOT OK"); 
+  mill.log.debug(err ? 'status '.grey + 'NOT OK'.red.bold : 'status '.grey + 'OK'.green.bold);  
+
+  // and then exit the process with code 1 or 0.
+  process.exit(err ? 1 : 0);
+});
