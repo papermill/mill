@@ -1,2 +1,32 @@
-{
+{ 
+  "banner": [
+    "              _   _  ",
+    "          o  | | | | ",
+    "_  _  _      | | | | ",
+    " |/ |/ |  |  |/  |/  ",
+    " |  |  |_/|_/|__/|__/",
+    ""
+  ],
+  
+  "___ SOME CONSTANTS ": "___",
+  "MD_EXTENSIONS": [ "markdown", "mkdn", "mdown", "md" ],
+  "AUTO_EXCLUDED_DIRS": [ "node_modules", ".tmp", ".papermill" ],
+  "format": "html",
+  
+  "___ DEFAULT PAPERMILL CONFIG ": "___",
+  "papermill": {
+    "output_format": "html",
+    "output_dir": "_output",
+    "pandoc": {
+      "standalone": true,
+      "smart": true,
+      "toc": true,
+      "css": "../../bookstrap/assets/bookstrap.css",
+      "template": "../bookstrap/bookstrap-template.html",
+      "variables": {
+        "webfont": true,
+        "scripts": true
+      }
+    }
+  }
 }

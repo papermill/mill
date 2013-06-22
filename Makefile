@@ -10,12 +10,15 @@ default: docs
 docs:
 	# generate doccs with docco
 	@# !!! docco needs to be installed!
-	@# !!! gh-pages clone needs to be in /${DOCS}!
-	
-	cd ${DOCS} && git rm -rf .
-	
 	docco -o ${DOCS} -l linear ${APP}.js lib/*.js lib/commands/*.js
 	cp ${DOCS}/${APP}.html ${DOCS}/index.html
+	
+
+docs-push:
+	# push docs to gh-pages
+	@# !!! gh-pages clone needs to be in /${DOCS}!
+		
+	make docs
 	
 	cd ${DOCS} && git add --all
 	cd ${DOCS} && git commit -m "./${DOCS} based on ${GIT_HASH}"
@@ -23,4 +26,4 @@ docs:
 
 
 # fool make, run this list of tasks no matter what
-.PHONY: docs
+.PHONY: docs docs-push

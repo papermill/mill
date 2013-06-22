@@ -1,7 +1,12 @@
-var
-
+//                     _   _  
+//                 o  | | | | 
+//       _  _  _      | | | | 
+//      / |/ |/ |  |  |/  |/  
+//        |  |  |_/|_/|__/|__/
+//
+// 
 // This is the application running as `mill` command line interface.
-// It is directly **require()**d and **start()**ed by the `./bin/mill` stub.
+// It is directly **require()**-d and **start()**-ed by the `./bin/mill` stub.
 
 // The stub is the only 'real' shell script in this project. That means it is the
 // only file directly called by the operating system. 
@@ -26,16 +31,20 @@ var
 // 
 // - the `node.js` core
 //     * *path* for working with paths
-path = require('path'),
+var path = require('path'),
 // - the npm registry (these need to be declared as dependencies in `package.json`, so they will be **install**ed by `npm`)
 //     * the *flatiron* anti-framework 
     flatiron = require('flatiron');
 // - (some modules will be built in) 
-    
+
+// We are a flatiron app!!!11!! So proud.
 var app = mill = module.exports = flatiron.app;
 
+// From flatiron, we get a bunch of stuff (but not too much)
+// - configuration management by nconf // TODO: move to module
 app.config.file({ file: path.join(__dirname, 'config', 'config.json') });
-
+  
+// - also use the "cli" plugin (enables lazy-loading commands and color output)
 app.use(flatiron.plugins.cli, {
   source: path.join(__dirname, 'lib', 'commands'),
   
@@ -45,22 +54,16 @@ app.use(flatiron.plugins.cli, {
   "notFoundUsage": true,
   
   // It is an array of strings, which will be seperated by line breaks.
-  usage: [
-    '              _   _  ',
-    '          o  | | | | ',
-    '_  _  _      | | | | ',
-    ' |/ |/ |  |  |/  |/  ',
-    ' |  |  |_/|_/|__/|__/',
-    '',
+  // We start it with our ASCII logo, and append the text to that.
+  usage: app.config.get('banner').concat([
     'Commands:',
     'mill new "Project Title" [-s paper|simple]     Setup a new project',
     'mill print [/path/to/project]                  Output project to PDF',
     'mill web [/path/to/project]                    Output project to HTML',
     'mill help <command>                            Show more help',
     ''
-  ],
+  ]),
 });
 
-// mill.start();
-
-// mill.log.debug(__dirname);
+// we also use our own modules
+app.use(require('./lib/utils'));
