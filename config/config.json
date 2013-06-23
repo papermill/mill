@@ -9,15 +9,23 @@
   ],
   
   "___ SOME CONSTANTS ": "___",
+  "DEFAULT_CONFIGFILE": "papermill.json",
+  "CONFIGFILES": [ 
+    ".papermill", ".papermill.json", "papermill.json",
+    ".paper", ".paper.json", "paper.json",
+    ".book", ".book.json", "book.json",
+    ".publication", ".publication.json", "publication.json"
+  ],
   "MD_EXTENSIONS": [ "markdown", "mkdn", "mdown", "md" ],
   "AUTO_EXCLUDED_DIRS": [ "node_modules", ".tmp", ".papermill" ],
-  "format": "html",
   
   "___ DEFAULT PAPERMILL CONFIG ": "___",
   "papermill": {
-    "output_format": "html",
+    "outputs": ["web"],
     "output_dir": "_output",
     "pandoc": {
+      "read": "markdown",
+      "write": "html",
       "standalone": true,
       "smart": true,
       "toc": true,
