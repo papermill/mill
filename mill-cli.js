@@ -65,5 +65,14 @@ app.use(flatiron.plugins.cli, {
   ]),
 });
 
-// we also use our own modules
+// 
+// We also use our own modules
+// 
+// - Utility functions
 app.use(require('./lib/utils'));
+// - Command Shortcuts
+require('./lib/alias');
+
+// 
+// This finishes the **mill** `CLI`.
+// 
