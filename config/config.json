@@ -1,4 +1,4 @@
-{ 
+{
   "banner": [
     "              _   _  ",
     "          o  | | | | ",
@@ -8,25 +8,56 @@
     ""
   ],
   
-  "___ SOME CONSTANTS ": "___",
-  "DEFAULT_CONFIGFILE": "papermill.json",
-  "CONFIGFILES": [ 
-    ".papermill", ".papermill.json", "papermill.json",
-    ".paper", ".paper.json", "paper.json",
-    ".book", ".book.json", "book.json",
-    ".publication", ".publication.json", "publication.json"
-  ],
-  "MD_EXTENSIONS": [ "markdown", "mkdn", "mdown", "md" ],
-  "AUTO_EXCLUDED_DIRS": [ "node_modules", ".tmp", ".papermill" ],
   
-  "___ DEFAULT PAPERMILL CONFIG ": "___",
+  "// ___ SOME CONSTANTS ": "___",
+  "DEFAULT_CONFIGFILE": "papermill.json",
+  "CONFIGFILES": [
+    "_papermill/config.json",
+    "_papermill/papermill.json",
+    "papermill/config.json",
+    "papermill/papermill.json",
+    ".papermill/config.json",
+    ".papermill/papermill.json",
+    ".papermill",
+    ".papermill.json",
+    "papermill.json"
+  ],
+  "CONFIGFILE_properties": [
+    
+  ],
+  "MD_EXTENSIONS": [
+    "markdown",
+    "mkdn",
+    "mdown",
+    "md"
+  ],
+  "AUTO_EXCLUDED_DIRS": [
+    "node_modules",
+    ".tmp",
+    ".papermill"
+  ],
+  
+  
+  "// ___ MILL CLI CONFIG ": "___",
+  "stationery": [
+    {
+      "name": "default",
+      "url": "https://github.com/papermill/stationery"
+    }
+  ],
+  
+  
+  "// ___ DEFAULT PAPERMILL CONFIG ": "___",
   "papermill": {
-    "outputs": ["web"],
+    "outputs": [
+      "web"
+    ],
     "output_dir": "_output",
     "pandoc": {
       "read": "markdown",
       "write": "html",
       "standalone": true,
+      "selfContained": true,
       "smart": true,
       "toc": true,
       "css": "../../bookstrap/assets/bookstrap.css",
