@@ -6,6 +6,9 @@
 // fancy bash completion (not implemented)
 // require('../lib/completion.js');
 
+// set the process title
+process.title = 'mill';
+
 // require myself
 var mill = require('../mill-cli.js');
 

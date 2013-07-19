@@ -50,7 +50,7 @@
   "// ___ DEFAULT PAPERMILL CONFIG ": "___",
   "papermill": {
     "outputs": [
-      "web"
+      "print", "web"
     ],
     "output_dir": "_output",
     "pandoc": {
@@ -65,6 +65,14 @@
       "variables": {
         "webfont": true,
         "scripts": true
+      }
+    },
+    "pandoc_targets": {
+      "web": {
+        
+      },
+      "print": {
+        
       }
     }
   }
