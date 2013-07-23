@@ -26,5 +26,18 @@
   },
   "name": "mill",
   "author": "Max F. Albrecht",
-  "homepage": "http://papermill.in"
+  "homepage": "http://papermill.in",
+  "main": "mill-cli.js",
+  "directories": {
+    "doc": "docs",
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/papermill/mill.git"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/papermill/mill/issues"
+  }
 }

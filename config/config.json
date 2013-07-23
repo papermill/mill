@@ -52,6 +52,9 @@
     "outputs": [
       "print", "web"
     ],
+    "known_props": [
+      "bibliography"
+    ],
     "output_dir": "_output",
     "pandoc": {
       "read": "markdown",
@@ -65,14 +68,6 @@
       "variables": {
         "webfont": true,
         "scripts": true
-      }
-    },
-    "pandoc_targets": {
-      "web": {
-        
-      },
-      "print": {
-        
       }
     }
   }
