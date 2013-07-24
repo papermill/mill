@@ -23,8 +23,36 @@
               
                 
                 <li>
+                  <a class="source" href="alias.html">
+                    alias.js
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="auto-conf.html">
+                    auto-conf.js
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="mill-build.html">
+                    mill-build.js
+                  </a>
+                </li>
+              
+                
+                <li>
                   <a class="source" href="create.html">
                     create.js
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="debug.html">
+                    debug.js
                   </a>
                 </li>
               
@@ -37,8 +65,15 @@
               
                 
                 <li>
-                  <a class="source" href="mill.html">
-                    mill.js
+                  <a class="source" href="readProjectConfig.html">
+                    readProjectConfig.js
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="utils.html">
+                    utils.js
                   </a>
                 </li>
               
@@ -56,14 +91,13 @@
 
       
         
-        
-        
-          <div class='highlight'><pre><span class="keyword">var</span></pre></div>
-        
-      
-        
-        <p>This is the application running as <code>mill</code> command line interface.
-It is directly <strong>require()</strong>d and <strong>start()</strong>ed by the <code>./bin/mill</code> stub.</p>
+        <pre><code>                _   _  
+            o  | | | | 
+  _  _  _      | | | | 
+ / |/ |/ |  |  |/  |/  
+   |  |  |_/|_/|__/|__/</code></pre>
+<p>This is the application running as <code>mill</code> command line interface.
+It is directly <strong>require()</strong>-d and <strong>start()</strong>-ed by the <code>./bin/mill</code> stub.</p>
 <p>The stub is the only &#39;real&#39; shell script in this project. That means it is the
 only file directly called by the operating system. 
 That is also the reason it needs a &quot;hashbang&quot; as it&#39;s first line.</p>
@@ -77,42 +111,74 @@ mill.start(function (err) {
   process.exit(err ? 1 : 0);
 });</code></pre>
 <hr>
-<p>First, we need to <strong>require()</strong> some modules from:</p>
+<h1>SETUP</h1>
+<p><em>The setup process is idiomatic for every nodejs file in this project, so it is only verbosely annotated here</em></p>
+<p>Since we start from nothing, we need to require some modules.</p>
+<p>Some of them come from the <code>node.js</code> core, they can be required without installing them. </p>
 <ul>
-<li>the <code>node.js</code> core<ul>
-<li><em>path</em> for working with paths</li>
-</ul>
-</li>
+<li>we need <em>path</em> for working with paths.</li>
 </ul>
 
         
-          <div class='highlight'><pre>path = require(<span class="string">'path'</span>),</pre></div>
+          <div class='highlight'><pre><span class="keyword">var</span> path = require(<span class="string">'path'</span>),</pre></div>
         
       
         
-        <ul>
-<li>the npm registry (these need to be declared as dependencies in <code>package.json</code>, so they will be <strong>install</strong>ed by <code>npm</code>)<ul>
-<li>the <em>flatiron</em> anti-framework </li>
-</ul>
-</li>
-</ul>
+        <p><small> \smallsize
+<em>A Note about external modules:</em> After <code>npm install --save something</code> in the app dir, they are installed in the sub-folder &#39;node_modules&#39;, thus will be found <em>automagically</em>. The <code>--save</code> falgs also instructs <code>npm</code> to write this &#39;dependency&#39; to the <code>package.json</code> file.
+</small> /normalsize</p>
+<p>Now, we <code>require()</code> our external modules.
+- the <em>flatiron</em> anti-framework </p>
 
         
           <div class='highlight'><pre>    flatiron = require(<span class="string">'flatiron'</span>);</pre></div>
         
       
         
+        <h1>{APP}</h1>
+<p>We start out with an &#39;app&#39; object, which we get from the <code>flatiron</code> module.</p>
+
+        
+          <div class='highlight'><pre><span class="keyword">var</span> app = mill = module.exports = flatiron.app;</pre></div>
+        
+      
+        
+        <p>This is a &quot;injection container&quot;, provided by the <a href="https://github.com/flatiron/broadway">&#39;broadway&#39; module</a>.
+This means plugins can modify the app object directly.
+Where do these plugins come from?
+- some are built-in and already activated by flatiron: (<code>log</code>, <code>conf</code>, <code>router</code>)
+- some are built-in, but need to be activated (<code>http</code>, <code>cli</code>, …)
+- Your own plugins need to activated as well
+From flatiron, we get a bunch of stuff (but not too much)</p>
+<h1>Configuration</h1>
+<p>Before doing anything with our <code>app</code>, we load the configuration. app.config is another built-in part of flatiron: the <a href="https://github.com/flatiron/nconf"><code>nconf</code> module</a>
+In short, it allows us to use 3 pre-configured sources where our configuration could come from:
+- a <code>JSON</code> file, ie. <code>./config.json</code> -&gt; <code>{ &quot;foo&quot;: 1337 }</code>
+- the environment variables of the process, ie. <code>$ export foo=1337 &amp;&amp; mill</code>
+- command line flags, ie. <code>mill --foo 1337</code></p>
+<p>The order in which we load the config specifies the order in which they are used! First is more important than second, etc.
+You can think of the config file as default settings, the environment variables as per-system setting and command line arguments as per-run settings, thus they are used in that order.</p>
+
+        
+          <div class='highlight'><pre>app.config.argv(); <span class="comment">// conf source: arguments is most important</span>
+app.config.env();  <span class="comment">// then env vars</span>
+app.config.file({ file: path.join(__dirname, <span class="string">'config'</span>, <span class="string">'config.json'</span>) }); <span class="comment">// lastly, our config.json file</span></pre></div>
+        
+      
+        
+        <p>FIXME: set the dir manually </p>
+
+        
+          <div class='highlight'><pre>app.config.set(<span class="string">'cwd'</span>, process.cwd);</pre></div>
+        
+      
+        
         <ul>
-<li>(some modules will be built in) </li>
+<li>also use the &quot;cli&quot; plugin (enables lazy-loading commands and color output)</li>
 </ul>
 
         
-          <div class='highlight'><pre>    
-<span class="keyword">var</span> app = mill = module.exports = flatiron.app;
-
-app.config.file({ file: path.join(__dirname, <span class="string">'config'</span>, <span class="string">'config.json'</span>) });
-
-app.use(flatiron.plugins.cli, {
+          <div class='highlight'><pre>app.use(flatiron.plugins.cli, {
   source: path.join(__dirname, <span class="string">'lib'</span>, <span class="string">'commands'</span>),</pre></div>
         
       
@@ -129,29 +195,42 @@ app.use(flatiron.plugins.cli, {
         
       
         
-        <p>It is an array of strings, which will be seperated by line breaks.</p>
+        <p>It is an array of strings, which will be seperated by line breaks.
+We start it with our ASCII logo, and append the text to that.</p>
 
         
-          <div class='highlight'><pre>  usage: [
-    <span class="string">'              _   _  '</span>,
-    <span class="string">'          o  | | | | '</span>,
-    <span class="string">'_  _  _      | | | | '</span>,
-    <span class="string">' |/ |/ |  |  |/  |/  '</span>,
-    <span class="string">' |  |  |_/|_/|__/|__/'</span>,
-    <span class="string">''</span>,
+          <div class='highlight'><pre>  usage: app.config.get(<span class="string">'banner'</span>).concat([
     <span class="string">'Commands:'</span>,
     <span class="string">'mill new "Project Title" [-s paper|simple]     Setup a new project'</span>,
     <span class="string">'mill print [/path/to/project]                  Output project to PDF'</span>,
     <span class="string">'mill web [/path/to/project]                    Output project to HTML'</span>,
     <span class="string">'mill help &lt;command&gt;                            Show more help'</span>,
     <span class="string">''</span>
-  ],
+  ]),
 });</pre></div>
         
       
         
-        <p>mill.start();</p>
-<p>mill.log.debug(__dirname);</p>
+        <p>We also use our own modules</p>
+<ul>
+<li>Utility functions</li>
+</ul>
+
+        
+          <div class='highlight'><pre>app.use(require(<span class="string">'./lib/utils'</span>));</pre></div>
+        
+      
+        
+        <ul>
+<li>Command Shortcuts</li>
+</ul>
+
+        
+          <div class='highlight'><pre>require(<span class="string">'./lib/alias'</span>);</pre></div>
+        
+      
+        
+        <p>This finishes the <strong>mill</strong> <code>CLI</code>.</p>
 
         
       

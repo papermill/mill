@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>readProjectConfig.js</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <link rel="stylesheet" media="all" href="public/stylesheets/normalize.css" />
+  <link rel="stylesheet" media="all" href="docco.css" />
+</head>
+<body>
+  <div class="container">
+    <div class="page">
+
+      <div class="header">
+        
+          <h1>readProjectConfig.js</h1>
+        
+
+        
+          <div class="toc">
+            <h3>Table of Contents</h3>
+            <ol>
+              
+                
+                <li>
+                  <a class="source" href="alias.html">
+                    alias.js
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="auto-conf.html">
+                    auto-conf.js
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="mill-build.html">
+                    mill-build.js
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="create.html">
+                    create.js
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="debug.html">
+                    debug.js
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="output.html">
+                    output.js
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="readProjectConfig.html">
+                    readProjectConfig.js
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="utils.html">
+                    utils.js
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="mill-cli.html">
+                    mill-cli.js
+                  </a>
+                </li>
+              
+            </ol>
+          </div>
+        
+      </div>
+
+      
+        
+        <p><em>Module to read a papermill project&#39;s configuration</em></p>
+
+        
+          <div class='highlight'><pre><span class="keyword">var</span> fs = require(<span class="string">'fs-extra'</span>),
+    path = require(<span class="string">'path'</span>),
+    f = require(<span class="string">'underscore'</span>),
+    mill = require(<span class="string">'../mill-cli'</span>),
+    tool = require(<span class="string">'./utils'</span>);
+
+module.exports = <span class="function"><span class="keyword">function</span> <span class="title">readConfig</span><span class="params">(directory, millconf, callback)</span> {</span>
+  
+  <span class="keyword">var</span> dir = directory || process.cwd;
+  millconf = millconf;</pre></div>
+        
+      
+        
+        <ol>
+<li>Get the config files with a function which 
+gives back an array of exisiting config files.</li>
+</ol>
+
+        
+          <div class='highlight'><pre>  getConfigFiles(millconf, dir, 
+    
+    <span class="function"><span class="keyword">function</span> <span class="params">(err, configs)</span> {</span>
+    
+    <span class="keyword">if</span> (err) { <span class="keyword">return</span> callback(err); }</pre></div>
+        
+      
+        
+        <ol>
+<li>Read the first found config and <code>callback</code> with it.</li>
+</ol>
+
+        
+          <div class='highlight'><pre>    readConfigs(configs, directory, callback);
+
+  });
+
+}</pre></div>
+        
+      
+        
+        <p>Function to search for configuration files: </p>
+
+        
+          <div class='highlight'><pre><span class="function"><span class="keyword">function</span> <span class="title">getConfigFiles</span><span class="params">(millconf, directory, callback)</span> {</span></pre></div>
+        
+      
+        
+        <p>Search for all (configured) configuration file names. </p>
+
+        
+          <div class='highlight'><pre>  tool.searchFs(<span class="string">"{"</span> + millconf.CONFIGFILES + <span class="string">"}"</span>, directory, 
+    
+    <span class="function"><span class="keyword">function</span> <span class="title">searchResults</span><span class="params">(err, files)</span> {</span></pre></div>
+        
+      
+        
+        <p>If there was an error, or we got back an <em>empty array</em>, 
+we callback with an error.</p>
+
+        
+          <div class='highlight'><pre>      <span class="keyword">if</span> (err || !files.length) {        
+        <span class="keyword">var</span> msg = err || <span class="string">"No config file found!"</span>;
+        <span class="keyword">return</span> callback(<span class="keyword">new</span> Error(msg), <span class="literal">null</span>);
+      }</pre></div>
+        
+      
+        
+        <p>Otherwise, we convert all the list entries to full paths </p>
+
+        
+          <div class='highlight'><pre>      files.forEach(<span class="function"><span class="keyword">function</span> <span class="params">(file, i)</span> {</span>
+        files[i] = path.join(directory, file);
+      });</pre></div>
+        
+      
+        
+        <p>and callback with the list of existing config files.</p>
+
+        
+          <div class='highlight'><pre>      <span class="keyword">return</span> callback(<span class="literal">null</span>, files);
+      
+    }
+    
+  );
+  
+}</pre></div>
+        
+      
+        
+        <p>Function to read configs:</p>
+
+        
+          <div class='highlight'><pre><span class="function"><span class="keyword">function</span> <span class="title">readConfigs</span><span class="params">(list, directory, callback)</span> {</span></pre></div>
+        
+      
+        
+        <ul>
+<li>prepare result objects</li>
+</ul>
+
+        
+          <div class='highlight'><pre>  <span class="keyword">var</span> JSONfile,
+      result;</pre></div>
+        
+      
+        
+        <ul>
+<li>clean the list: remove directories</li>
+</ul>
+
+        
+          <div class='highlight'><pre>  tool.cleanDirectories( list, 
+    
+    <span class="function"><span class="keyword">function</span> <span class="params">(result)</span> {</span></pre></div>
+        
+      
+        
+        <p>return error if the list is empty after cleaning</p>
+
+        
+          <div class='highlight'><pre>      <span class="keyword">if</span> (!result.length) {
+        <span class="keyword">return</span> callback(<span class="string">"No config file found!"</span>);
+      }
+      <span class="keyword">else</span> {</pre></div>
+        
+      
+        
+        <ul>
+<li>pick the first config file from the remaining list</li>
+</ul>
+
+        
+          <div class='highlight'><pre>        JSONfile = f.first(result);
+        <span class="keyword">if</span> (mill) mill.log.debug(<span class="string">"config file: "</span> + JSONfile);</pre></div>
+        
+      
+        
+        <ul>
+<li>safely read and parse the JSON file</li>
+</ul>
+
+        
+          <div class='highlight'><pre>        fs.readJson(JSONfile, <span class="function"><span class="keyword">function</span> <span class="params">(err, data)</span> {</span></pre></div>
+        
+      
+        
+        <ul>
+<li>check for error or missing data</li>
+</ul>
+
+        
+          <div class='highlight'><pre>          <span class="keyword">if</span> (err || !data) {
+            err = err || <span class="keyword">new</span> Error(<span class="string">'Could not read config!'</span>);
+            callback(err);
+          }</pre></div>
+        
+      
+        
+        <ul>
+<li>add the path and <code>callback</code></li>
+</ul>
+
+        
+          <div class='highlight'><pre>          data.path = directory;
+          callback(<span class="literal">null</span>, data);
+          
+        });
+        
+      }
+
+    }
+  );
+}</pre></div>
+        
+      
+      <div class="fleur">h</div>
+    </div>
+  </div>
+</body>
+</html>

@@ -30,8 +30,36 @@
               
                 
                 <li>
+                  <a class="source" href="alias.html">
+                    alias.js
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="auto-conf.html">
+                    auto-conf.js
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="mill-build.html">
+                    mill-build.js
+                  </a>
+                </li>
+              
+                
+                <li>
                   <a class="source" href="create.html">
                     create.js
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="debug.html">
+                    debug.js
                   </a>
                 </li>
               
@@ -44,8 +72,15 @@
               
                 
                 <li>
-                  <a class="source" href="mill.html">
-                    mill.js
+                  <a class="source" href="readProjectConfig.html">
+                    readProjectConfig.js
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="utils.html">
+                    utils.js
                   </a>
                 </li>
               
@@ -67,7 +102,7 @@
 <p>This is displayed when the user requests help on this command.</p>
 
         
-          <div class='highlight'><pre>create.usage = [
+          <div class='highlight'><pre><span class="keyword">var</span> usage = [
   <span class="string">'Create a new writing project with the name you choose'</span>,
   <span class="string">'and some content to get you started.'</span>,
   <span class="string">'Optionally choose a stationery (default is Paper).'</span>,
@@ -86,15 +121,7 @@
       
         
         <h2>Workflow: <strong>create</strong></h2>
-<p>The whole command workflow lies in 1 main function,
-which we also export as a module;</p>
-
-        
-          <div class='highlight'><pre>module.exports = create;</pre></div>
-        
-      
-        
-        <p>this function gets called by the cli app when the user runs the <strong>create</strong> command.</p>
+<p>this function gets called by the cli app when the user runs the <strong>create</strong> command.</p>
 
         
           <div class='highlight'><pre><span class="function"><span class="keyword">function</span> <span class="title">create</span> <span class="params">(argument, callback)</span> {</span></pre></div>
@@ -122,24 +149,47 @@ which we also export as a module;</p>
 </ul>
 </li>
 </ul>
-<p>var stationery = {};
-stationery.name = mill.config.stationery_name || &quot;Paper&quot;;
-<code>stationery.url</code> defines the location and the protocol of the stationery source
-- protocol: <code>HTTP(S)</code> or <code>git</code>. When using git over HTTP, URL has to end in .git
-- stationery is fetched according to the determined protocoll
-stationery.url = mill.config.stationery_url || &quot;<a href="https://github.com/papermill/stationery.git">https://github.com/papermill/stationery.git</a>&quot;;</p>
-<ul>
-<li>fetch the stationery from url
-fetch(stationery.url, function(err, res, body){
-if (stationery.url ) {};
-});</li>
+
+        
+          <div class='highlight'><pre>  <span class="keyword">var</span> stat = app.config.stationery;</pre></div>
+        
+      
+        
+        <ul>
+<li>check for needed configuration, fail if it is missing</li>
 </ul>
 
         
-          <div class='highlight'><pre>  
+          <div class='highlight'><pre>  <span class="keyword">if</span> (!stat) {
+    <span class="keyword">return</span> app.fail(<span class="string">'No stationery found!'</span>, callback)
+  }
+  <span class="keyword">else</span> <span class="keyword">if</span> (!stat.url) {
+    <span class="keyword">return</span> app.fail(<span class="string">'No stationery URL found!'</span>, callback)
+  }</pre></div>
+        
+      
+        
+        <ul>
+<li>fetch the stationery from url</li>
+</ul>
+
+        
+          <div class='highlight'><pre>  fetch(stat.url, <span class="keyword">function</span>(err, res, body){
+    <span class="keyword">if</span> (stationery.url ) {};
+  });
+  
   
   callback();
 };</pre></div>
+        
+      
+        
+        <p>The whole command workflow lies in 1 main function,
+which we also export as a module;</p>
+
+        
+          <div class='highlight'><pre>create.usage = usage;
+module.exports = create;</pre></div>
         
       
       <div class="fleur">h</div>

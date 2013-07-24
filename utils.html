@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>utils.js</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <link rel="stylesheet" media="all" href="public/stylesheets/normalize.css" />
+  <link rel="stylesheet" media="all" href="docco.css" />
+</head>
+<body>
+  <div class="container">
+    <div class="page">
+
+      <div class="header">
+        
+          <h1>utils.js</h1>
+        
+
+        
+          <div class="toc">
+            <h3>Table of Contents</h3>
+            <ol>
+              
+                
+                <li>
+                  <a class="source" href="alias.html">
+                    alias.js
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="auto-conf.html">
+                    auto-conf.js
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="mill-build.html">
+                    mill-build.js
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="create.html">
+                    create.js
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="debug.html">
+                    debug.js
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="output.html">
+                    output.js
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="readProjectConfig.html">
+                    readProjectConfig.js
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="utils.html">
+                    utils.js
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="mill-cli.html">
+                    mill-cli.js
+                  </a>
+                </li>
+              
+            </ol>
+          </div>
+        
+      </div>
+
+      
+        
+        
+        
+          <div class='highlight'><pre><span class="keyword">var</span> fs = require(<span class="string">'graceful-fs'</span>),
+    async = require(<span class="string">'async'</span>),
+    glob = require(<span class="string">'glob'</span>),
+    tool = {};</pre></div>
+        
+      
+        
+        <p>function to search the filesystem (using <code>glob</code> module)</p>
+
+        
+          <div class='highlight'><pre>tool.searchFs = <span class="function"><span class="keyword">function</span> <span class="params">(string, directory, callback)</span> {</span>
+  
+  glob(string,</pre></div>
+        
+      
+        
+        <ul>
+<li>Options as per the <a href="https://npmjs.org/package/glob"><code>glob</code> manual</a></li>
+</ul>
+
+        
+          <div class='highlight'><pre>    {</pre></div>
+        
+      
+        
+        <blockquote>
+<p>&quot;The current working directory in which to search.</p>
+</blockquote>
+
+        
+          <div class='highlight'><pre>      <span class="string">'cwd'</span>: directory,</pre></div>
+        
+      
+        
+        <blockquote>
+<p>no dotfiles</p>
+</blockquote>
+
+        
+          <div class='highlight'><pre>      <span class="string">'dot'</span>: <span class="literal">false</span>,</pre></div>
+        
+      
+        
+        <blockquote>
+<p>Add a / character to directory matches.</p>
+</blockquote>
+
+        
+          <div class='highlight'><pre>      <span class="string">'mark'</span>: <span class="literal">true</span>,</pre></div>
+        
+      
+        
+        <blockquote>
+<p>Perform a case-insensitive match. (…)&quot;</p>
+</blockquote>
+
+        
+          <div class='highlight'><pre>      <span class="string">'nocase'</span>: <span class="literal">true</span>,
+      <span class="string">'nonegate'</span>: <span class="literal">true</span>
+    }, 
+    
+    <span class="function"><span class="keyword">function</span> <span class="title">globResult</span><span class="params">(err, res)</span> {</span>
+      callback(err || <span class="literal">null</span>, res || <span class="literal">null</span>);
+  });
+  
+};</pre></div>
+        
+      
+        
+        <p>function to check if a <code>path</code> is <strong>not</strong> a directory</p>
+
+        
+          <div class='highlight'><pre>tool.isNotDir = <span class="function"><span class="keyword">function</span> <span class="params">(path, callback)</span> {</span>
+  fs.stat(path, <span class="function"><span class="keyword">function</span> <span class="params">(err, stats)</span> {</span>
+    <span class="keyword">if</span> (err) {
+      callback(err)
+    }
+    callback(!stats.isDirectory());        
+  });
+};
+
+tool.isDir = <span class="function"><span class="keyword">function</span> <span class="params">(path, callback)</span> {</span>
+  dirCheck(path, <span class="literal">true</span>, callback)
+};
+
+tool.isNotDir = <span class="function"><span class="keyword">function</span> <span class="params">(path, callback)</span> {</span>
+  dirCheck(path, <span class="literal">false</span>, callback)
+};
+
+<span class="function"><span class="keyword">function</span> <span class="title">dirCheck</span><span class="params">(path, bool, callback)</span> {</span>
+  fs.stat(path, <span class="function"><span class="keyword">function</span> <span class="params">(err, stats)</span> {</span>
+    <span class="keyword">if</span> (err) { callback(err); }
+    
+    res = !!stats.isDirectory();
+    <span class="keyword">if</span> (!bool) { res = !res; }
+    
+    callback(<span class="literal">null</span>, res);        
+  });
+};</pre></div>
+        
+      
+        
+        <p>function to safely read JSON file from <code>path</code> in file system</p>
+
+        
+          <div class='highlight'><pre>tool.readJSONfile = <span class="function"><span class="keyword">function</span> <span class="params">(path, callback)</span> {</span>
+  
+  fs.readFile(path, <span class="string">'utf8'</span>, <span class="function"><span class="keyword">function</span> <span class="params">(err, data)</span> {</span></pre></div>
+        
+      
+        
+        <p>catch file read error and <code>callback</code> with it</p>
+
+        
+          <div class='highlight'><pre>    <span class="keyword">if</span> (err) { <span class="keyword">return</span> callback(err); }</pre></div>
+        
+      
+        
+        <p>carefully parse the JSON data</p>
+
+        
+          <div class='highlight'><pre>    <span class="keyword">try</span> {
+      result = JSON.parse(data);
+    } <span class="keyword">catch</span> (err) {</pre></div>
+        
+      
+        
+        <p>catch any parsing error and callback with it</p>
+
+        
+          <div class='highlight'><pre>      <span class="keyword">return</span> callback(err);
+    }</pre></div>
+        
+      
+        
+        <p>callback with no error and the result</p>
+
+        
+          <div class='highlight'><pre>    callback(<span class="literal">null</span>, result);
+
+  });
+  
+}</pre></div>
+        
+      
+        
+        <p>function to clean directories from a <code>list</code> of paths</p>
+
+        
+          <div class='highlight'><pre>tool.cleanDirectories = <span class="function"><span class="keyword">function</span> <span class="params">(list, callback)</span> {</span></pre></div>
+        
+      
+        
+        <p>run <code>isNotDir</code> for every item in <code>list</code>, then <code>callback</code> with <code>result</code>.</p>
+
+        
+          <div class='highlight'><pre>  async.filter( 
+    list,
+    <span class="function"><span class="keyword">function</span> <span class="params">(item, callback)</span> {</span>
+      tool.isNotDir(item, <span class="function"><span class="keyword">function</span> <span class="params">(err, res)</span> {</span>
+        callback(res);
+      })
+    },
+    callback );
+};</pre></div>
+        
+      
+        
+        <h1>Attaching</h1>
+<ul>
+<li><code>exports.attach</code> gets called by broadway on <code>app.use</code></li>
+</ul>
+
+        
+          <div class='highlight'><pre>tool.attach = <span class="function"><span class="keyword">function</span> <span class="params">(options)</span> {</span>
+  
+  <span class="keyword">var</span> app = <span class="keyword">this</span>;</pre></div>
+        
+      
+        
+        <p>Here, we attach some functions directly to the <code>app</code> object.</p>
+
+        
+      
+        
+        <p><code>fail()</code> an <code>app</code> with <code>err</code>, can be &#39;string&#39; or &#39;Error&#39;: </p>
+
+        
+          <div class='highlight'><pre>  app.fail = <span class="function"><span class="keyword">function</span> <span class="params">(error, data, cb)</span> {</span>
+    
+    <span class="keyword">var</span> meta, callback;</pre></div>
+        
+      
+        
+        <p>no data? use as callback.</p>
+
+        
+          <div class='highlight'><pre>    <span class="keyword">if</span> (<span class="keyword">typeof</span> data === <span class="string">'function'</span>) {
+      callback = data;
+    } <span class="keyword">else</span> {
+      meta = data;
+    }  
+    
+    
+    <span class="keyword">if</span> (error.constructor.name !== <span class="string">'Error'</span>) {
+      
+      <span class="keyword">if</span> (<span class="keyword">typeof</span> error === <span class="string">'string'</span>) {
+        error = <span class="keyword">new</span> Error(error);
+      }
+      <span class="keyword">else</span> {
+        meta = error;
+        error = <span class="keyword">new</span> Error(<span class="string">""</span>);
+      }
+    }</pre></div>
+        
+      
+        
+        <p>no meta? use as callback.</p>
+
+        
+          <div class='highlight'><pre>    <span class="keyword">if</span> (<span class="keyword">typeof</span> meta === <span class="string">'function'</span>) {
+      callback = meta;
+      app.log.error(error);    
+    } <span class="keyword">else</span> {
+      app.log.error(error, meta);
+    }  
+    <span class="keyword">return</span> callback(error);
+    
+  };
+
+};</pre></div>
+        
+      
+        
+        <p><code>exports.init</code> gets called by broadway on <code>app.init</code>, </p>
+
+        
+          <div class='highlight'><pre>tool.init = <span class="function"><span class="keyword">function</span> <span class="params">(done)</span> {</span></pre></div>
+        
+      
+        
+        <p>but this plugin doesn&#39;t require any initialization steps)</p>
+
+        
+          <div class='highlight'><pre>  <span class="keyword">return</span> done();
+};</pre></div>
+        
+      
+        
+        <p>export <code>tool</code> as module</p>
+
+        
+          <div class='highlight'><pre>module.exports = tool;</pre></div>
+        
+      
+      <div class="fleur">h</div>
+    </div>
+  </div>
+</body>
+</html>

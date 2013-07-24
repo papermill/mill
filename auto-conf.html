@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>auto-conf.js</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <link rel="stylesheet" media="all" href="public/stylesheets/normalize.css" />
+  <link rel="stylesheet" media="all" href="docco.css" />
+</head>
+<body>
+  <div class="container">
+    <div class="page">
+
+      <div class="header">
+        
+          <h1>auto-conf.js</h1>
+        
+
+        
+          <div class="toc">
+            <h3>Table of Contents</h3>
+            <ol>
+              
+                
+                <li>
+                  <a class="source" href="alias.html">
+                    alias.js
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="auto-conf.html">
+                    auto-conf.js
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="mill-build.html">
+                    mill-build.js
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="create.html">
+                    create.js
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="debug.html">
+                    debug.js
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="output.html">
+                    output.js
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="readProjectConfig.html">
+                    readProjectConfig.js
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="utils.html">
+                    utils.js
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="mill-cli.html">
+                    mill-cli.js
+                  </a>
+                </li>
+              
+            </ol>
+          </div>
+        
+      </div>
+
+      
+        
+        
+        
+          <div class='highlight'><pre><span class="keyword">var</span> glob = require(<span class="string">"glob"</span>);</pre></div>
+        
+      
+        
+        <p>function for running  auto-configuration</p>
+
+        
+          <div class='highlight'><pre><span class="function"><span class="keyword">function</span> <span class="title">autoconf</span><span class="params">(config, callback)</span> {</span></pre></div>
+        
+      
+        
+        <ul>
+<li>get a list of all Markdown files by extension (configured)</li>
+</ul>
+
+        
+          <div class='highlight'><pre>  glob(<span class="string">"**/*.{"</span> + config.MD_EXTENSIONS + <span class="string">"}"</span>,</pre></div>
+        
+      
+        
+        <ul>
+<li>Options as per the <a href="https://npmjs.org/package/glob"><code>glob</code> manual</a></li>
+</ul>
+
+        
+          <div class='highlight'><pre>    {</pre></div>
+        
+      
+        
+        <blockquote>
+<p>&quot;The current working directory in which to search.</p>
+</blockquote>
+
+        
+          <div class='highlight'><pre>      <span class="string">'cwd'</span>: config.cwd,</pre></div>
+        
+      
+        
+        <blockquote>
+<p>no dotfiles</p>
+</blockquote>
+
+        
+          <div class='highlight'><pre>      <span class="string">'dot'</span>: <span class="literal">false</span>,</pre></div>
+        
+      
+        
+        <blockquote>
+<p>Add a / character to directory matches.</p>
+</blockquote>
+
+        
+          <div class='highlight'><pre>      <span class="string">'mark'</span>: <span class="literal">true</span>,</pre></div>
+        
+      
+        
+        <blockquote>
+<p>Perform a case-insensitive match. (…)&quot;</p>
+</blockquote>
+
+        
+          <div class='highlight'><pre>      <span class="string">'nocase'</span>: <span class="literal">true</span>,
+      <span class="string">'nonegate'</span>: <span class="literal">true</span>
+    }, 
+    
+    <span class="function"><span class="keyword">function</span> <span class="title">globResults</span><span class="params">(err, files)</span> {</span></pre></div>
+        
+      
+        
+        <p>filter excluded dirs (like &#39;node_modules&#39;)</p>
+
+        
+          <div class='highlight'><pre>      
+      config.AUTO_EXCLUDED_DIRS.forEach(<span class="function"><span class="keyword">function</span> <span class="params">(dir)</span> {</span>
+      
+          files = files.filter(<span class="keyword">function</span>(item){
+          
+              <span class="keyword">if</span> (item.indexOf(dir) !== <span class="number">0</span>) {
+              
+                <span class="keyword">return</span> item;    
+                    
+              }
+                    
+          });
+      
+      });</pre></div>
+        
+      
+        
+        <p>build result      </p>
+
+        
+          <div class='highlight'><pre>      <span class="keyword">if</span> (files) {</pre></div>
+        
+      
+        
+        <p>callback with result</p>
+
+        
+          <div class='highlight'><pre>        callback(<span class="literal">null</span>, { <span class="string">'files'</span>: files });
+           
+      } <span class="keyword">else</span> {
+        
+        err = err || <span class="keyword">new</span> Error(<span class="string">"wtf"</span>);</pre></div>
+        
+      
+        
+        <p>callback with error</p>
+
+        
+          <div class='highlight'><pre>        callback(err || <span class="literal">null</span>);
+        
+      }
+      
+    });
+      
+}
+
+module.exports = autoconf;</pre></div>
+        
+      
+      <div class="fleur">h</div>
+    </div>
+  </div>
+</body>
+</html>

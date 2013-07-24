@@ -2,7 +2,7 @@
 
 <html>
 <head>
-  <title>mill **output**</title>
+  <title>output.js</title>
   <meta http-equiv="content-type" content="text/html; charset=UTF-8">
   <link rel="stylesheet" media="all" href="public/stylesheets/normalize.css" />
   <link rel="stylesheet" media="all" href="docco.css" />
@@ -13,14 +13,7 @@
 
       <div class="header">
         
-          
-          <h1>mill <strong>output</strong></h1>
-<blockquote>
-<p>renders a papermill project for print or web</p>
-</blockquote>
-<hr>
-
-          
+          <h1>output.js</h1>
         
 
         
@@ -30,8 +23,36 @@
               
                 
                 <li>
+                  <a class="source" href="alias.html">
+                    alias.js
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="auto-conf.html">
+                    auto-conf.js
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="mill-build.html">
+                    mill-build.js
+                  </a>
+                </li>
+              
+                
+                <li>
                   <a class="source" href="create.html">
                     create.js
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="debug.html">
+                    debug.js
                   </a>
                 </li>
               
@@ -44,8 +65,15 @@
               
                 
                 <li>
-                  <a class="source" href="mill.html">
-                    mill.js
+                  <a class="source" href="readProjectConfig.html">
+                    readProjectConfig.js
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="utils.html">
+                    utils.js
                   </a>
                 </li>
               
@@ -63,57 +91,173 @@
 
       
         
-        <p>Variables setup</p>
-<ul>
-<li>we require our own <code>mill</code> library</li>
-</ul>
-
         
-          <div class='highlight'><pre><span class="keyword">var</span> mill = require(<span class="string">'../../mill-cli'</span>),</pre></div>
+        
+          <div class='highlight'><pre><span class="comment">/*jslint node: true, regexp: true, nomen: true, sloppy: true, vars: true, white: true */</span></pre></div>
         
       
         
-        <ul>
-<li>we export ourselves as CommonJS module</li>
-</ul>
+        <h1>mill <strong>output</strong></h1>
+<blockquote>
+<p>Create and set up a new project.</p>
+</blockquote>
+<hr>
 
-        
-          <div class='highlight'><pre>    output = exports;</pre></div>
         
       
         
-        <h1>Usage</h1>
-<p>define usage information for this command</p>
+        <p>(Required modules)</p>
 
         
-          <div class='highlight'><pre>output.usage= [
+          <div class='highlight'><pre><span class="keyword">var</span> fs = require(<span class="string">'graceful-fs'</span>),
+    path = require(<span class="string">'path'</span>),
+    async = require(<span class="string">'async'</span>),
+    f = require(<span class="string">'underscore'</span>),
+    build = require(<span class="string">'../build/mill-build'</span>),
+    readProjectConfig = require(<span class="string">'../readProjectConfig'</span>);</pre></div>
+        
+      
+        
+        <h2>Usage Information</h2>
+<p>This is displayed when the user requests help on this command.</p>
+
+        
+          <div class='highlight'><pre><span class="keyword">var</span> usage= [
   <span class="string">'Renders a papermill project according to settings.'</span>,
-  <span class="string">'Can export to PDF (print) and HTML (web)'</span>,
+  <span class="string">'- Can export to PDF (print) and HTML (web)'</span>,
+  <span class="string">'- Uses auto-mode when no settings are found'</span>,
   <span class="string">''</span>,
-  <span class="string">'Usage: mill output &lt;project&gt; [--format]'</span>
+  <span class="string">'Usage: mill output &lt;project&gt; [--format]'</span>,
   <span class="string">''</span>,
   <span class="string">'Example usages:'</span>,
-  <span class="string">'mill print'</span>  
-  <span class="string">'mill output --print &lt;/path/to/project&gt;'</span>  
-  <span class="string">'mill web'</span>  
-  <span class="string">'mill output --web .'</span>  
+  <span class="string">'mill print'</span>,
+  <span class="string">'mill output --print &lt;/path/to/project&gt;'</span>,
+  <span class="string">'mill web'</span>,
+  <span class="string">'mill output --web .'</span> 
 ];</pre></div>
         
       
         
-        <h1>Workflow: <strong>output</strong></h1>
-<p>use <a href="http://gruntjs.com/configuring-tasks"><code>grunt</code></a> ?</p>
-<ul>
-<li><p>get working directory</p>
-</li>
-<li><p>get papermill project config for working directory</p>
-</li>
-<li><p>read files from working directory</p>
-</li>
-<li><p>recurse into all all sub-folders</p>
-</li>
+        <h2>Workflow: <strong>output</strong></h2>
+<p>this function gets called by the cli app when the user runs the <strong>output</strong> command.</p>
+
+        
+          <div class='highlight'><pre><span class="function"><span class="keyword">function</span> <span class="title">output</span> <span class="params">(dir, callback)</span> {</span></pre></div>
+        
+      
+        
+        <p>Our context is set to the application, we save it in a variable for convenience.</p>
+
+        
+          <div class='highlight'><pre>  <span class="keyword">var</span> app = <span class="keyword">this</span>;</pre></div>
+        
+      
+        
+        <p>TODO: loop over all args</p>
+
+        
+      
+        
+        <p>TODO: see if arg is file or path</p>
+
+        
+      
+        
+        <p>set path from supplied argument or use the current working directory</p>
+
+        
+          <div class='highlight'><pre>  dir = dir || process.cwd();</pre></div>
+        
+      
+        
+        <p>make the path absolute from the current working directory</p>
+
+        
+          <div class='highlight'><pre>  dir = path.resolve(process.cwd(), dir);
+  
+  app.log.debug(<span class="string">"dir: "</span>, dir);</pre></div>
+        
+      
+        
+        <p>For control flow, we use an <code>async</code> chain of events, where <a href="https://github.com/caolan/async#waterfall">&quot;each functions callback value becomes the next functions first argument&quot;</a>:</p>
+
+        
+          <div class='highlight'><pre>  async.waterfall([</pre></div>
+        
+      
+        
+        <ol>
+<li>Get the user configuration</li>
+</ol>
+
+        
+          <div class='highlight'><pre>      <span class="function"><span class="keyword">function</span> <span class="title">getUserConf</span><span class="params">(callback)</span> {</span></pre></div>
+        
+      
+        
+        <ul>
+<li>try to read config file from project path</li>
 </ul>
 
+        
+          <div class='highlight'><pre>        readProjectConfig(dir, app.config.get(), callback);  
+      
+      },</pre></div>
+        
+      
+        
+        <ol>
+<li>Build with the configuration</li>
+</ol>
+
+        
+          <div class='highlight'><pre>      <span class="function"><span class="keyword">function</span> <span class="params">(config, callback)</span> {</span>
+        build(config, callback);
+      }
+    ],</pre></div>
+        
+      
+        
+        <ol>
+<li>Done</li>
+</ol>
+
+        
+          <div class='highlight'><pre>    <span class="function"><span class="keyword">function</span> <span class="title">finishedChain</span><span class="params">(err, result)</span> {</span>
+      
+      <span class="keyword">if</span> (err) { <span class="keyword">return</span> app.fail(err, callback); }</pre></div>
+        
+      
+        
+        <ul>
+<li>build answer</li>
+</ul>
+
+        
+          <div class='highlight'><pre>      <span class="keyword">var</span> res = result;</pre></div>
+        
+      
+        
+        <ul>
+<li>callback to the CLI</li>
+</ul>
+
+        
+          <div class='highlight'><pre>      app.log.debug(<span class="string">"build res: "</span>, res);
+      callback(<span class="literal">null</span>, res);
+    
+  });
+  
+}</pre></div>
+        
+      
+        
+        <p>The whole command workflow lies in 1 main function,
+which we also export as a module;</p>
+
+        
+          <div class='highlight'><pre>output.usage = usage;
+module.exports = output;</pre></div>
         
       
       <div class="fleur">h</div>

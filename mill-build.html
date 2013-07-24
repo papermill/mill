@@ -1,0 +1,1108 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>mill-build.js</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <link rel="stylesheet" media="all" href="public/stylesheets/normalize.css" />
+  <link rel="stylesheet" media="all" href="docco.css" />
+</head>
+<body>
+  <div class="container">
+    <div class="page">
+
+      <div class="header">
+        
+          <h1>mill-build.js</h1>
+        
+
+        
+          <div class="toc">
+            <h3>Table of Contents</h3>
+            <ol>
+              
+                
+                <li>
+                  <a class="source" href="alias.html">
+                    alias.js
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="auto-conf.html">
+                    auto-conf.js
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="mill-build.html">
+                    mill-build.js
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="create.html">
+                    create.js
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="debug.html">
+                    debug.js
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="output.html">
+                    output.js
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="readProjectConfig.html">
+                    readProjectConfig.js
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="utils.html">
+                    utils.js
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="mill-cli.html">
+                    mill-cli.js
+                  </a>
+                </li>
+              
+            </ol>
+          </div>
+        
+      </div>
+
+      
+        
+        <p><em>A module to build output from papermill project config</em></p>
+<h1>Setup</h1>
+
+        
+          <div class='highlight'><pre><span class="keyword">var</span> fs = require(<span class="string">'fs-extra'</span>), <span class="comment">// uses 'graceful-fs' if available</span>
+    path = require(<span class="string">'path'</span>),
+    temp = require(<span class="string">'temp'</span>),
+    async = require(<span class="string">'async'</span>),
+    f = require(<span class="string">'underscore'</span>),
+    pandoc = require(<span class="string">'jandoc-async'</span>);
+    mill = require(<span class="string">'../../mill-cli'</span>);</pre></div>
+        
+      
+        
+        <h1>Module</h1>
+
+        
+          <div class='highlight'><pre>module.exports = <span class="function"><span class="keyword">function</span> <span class="title">build</span><span class="params">(project, callback)</span> {</span></pre></div>
+        
+      
+        
+        <p>Here lies just the workflow connecting the worker functions. 
+Each functions <code>callback</code> values is the first argument of the next function.</p>
+
+        
+          <div class='highlight'><pre>  
+  async.waterfall(
+    
+    [
+      <span class="function"><span class="keyword">function</span> <span class="title">start</span><span class="params">(callback)</span> {</span>
+        inflateConfig(project, callback)
+      },
+      deriveBuildJobs,
+      render
+    ],
+    
+    callback
+    
+  );
+  
+};</pre></div>
+        
+      
+        
+        <h1>Worker functions</h1>
+<h2>inflateConfig</h2>
+
+        
+          <div class='highlight'><pre><span class="function"><span class="keyword">function</span> <span class="title">inflateConfig</span><span class="params">(config, callback)</span> {</span></pre></div>
+        
+      
+        
+        <ul>
+<li>apply defaults where nothing is given</li>
+<li>read all lazy-configurable properties (input, output)</li>
+<li>see if it is string, array or object</li>
+<li>rewrite lazy values to full values</li>
+</ul>
+
+        
+      
+        
+        <p>Handle errors - TODO: spec validation…</p>
+
+        
+          <div class='highlight'><pre>  <span class="keyword">if</span> (!config) {
+    callback(<span class="keyword">new</span> Error(<span class="string">"No config given, can't inflate!"</span>));
+  }</pre></div>
+        
+      
+        
+        <ul>
+<li><code>project</code> config just with &quot;known&quot; properties</li>
+</ul>
+
+        
+          <div class='highlight'><pre>  <span class="keyword">var</span> project = f.pick(config, mill.config.get(<span class="string">'papermill:known_props'</span>));</pre></div>
+        
+      
+        
+        <h3><code>input</code> -- NOT optional for now</h3>
+
+        
+          <div class='highlight'><pre>  
+  [<span class="string">'input'</span>].forEach(<span class="function"><span class="keyword">function</span> <span class="params">(prop)</span> {</span>
+    
+    <span class="keyword">if</span> (<span class="keyword">typeof</span> config[prop] === <span class="string">'undefined'</span>) {
+      callback(<span class="string">"No config.input!"</span>);
+    }
+    
+    <span class="keyword">var</span> item = config[prop];</pre></div>
+        
+      
+        
+        <ul>
+<li>is it a string?</li>
+</ul>
+
+        
+          <div class='highlight'><pre>    <span class="keyword">if</span> (<span class="keyword">typeof</span> item === <span class="string">'string'</span>) {</pre></div>
+        
+      
+        
+        <p>use it as <code>path</code></p>
+
+        
+          <div class='highlight'><pre>      config[prop] = [{ <span class="string">'path'</span>: item }];
+    }</pre></div>
+        
+      
+        
+        <ul>
+<li>is object (or array)?</li>
+</ul>
+
+        
+          <div class='highlight'><pre>    <span class="keyword">if</span> (<span class="keyword">typeof</span> item === <span class="string">'object'</span>) {</pre></div>
+        
+      
+        
+        <ul>
+<li>is really array?</li>
+</ul>
+
+        
+          <div class='highlight'><pre>      <span class="keyword">if</span> (Array.isArray(item)) {</pre></div>
+        
+      
+        
+        <p>nothing to do</p>
+
+        
+          <div class='highlight'><pre>      }</pre></div>
+        
+      
+        
+        <ul>
+<li>is really an object?</li>
+</ul>
+
+        
+          <div class='highlight'><pre>      <span class="keyword">else</span> {</pre></div>
+        
+      
+        
+        <ul>
+<li>is there a non-empty list in it?
+(Configure list property name to &#39;list&#39;)</li>
+</ul>
+
+        
+          <div class='highlight'><pre>        <span class="keyword">var</span> lst = <span class="string">'list'</span>;
+        <span class="keyword">if</span> (item[lst] &amp;&amp; item[lst].length) {</pre></div>
+        
+      
+        
+        <ul>
+<li>prepare result</li>
+</ul>
+
+        
+          <div class='highlight'><pre>          <span class="keyword">var</span> res = [],</pre></div>
+        
+      
+        
+        <ul>
+<li>save the base config, minus the list</li>
+</ul>
+
+        
+          <div class='highlight'><pre>          base = f.extend({}, f.omit(item, lst));</pre></div>
+        
+      
+        
+        <ul>
+<li>loop over the list</li>
+</ul>
+
+        
+          <div class='highlight'><pre>          item.list.forEach(<span class="function"><span class="keyword">function</span> <span class="params">(li)</span> {</span>
+            
+            <span class="keyword">var</span> i = f.extend({}, f.omit(base, <span class="string">'path'</span>), li);</pre></div>
+        
+      
+        
+        <ul>
+<li>set path by joining those from <code>base</code> and <code>i</code>, if they exist</li>
+</ul>
+
+        
+          <div class='highlight'><pre>            i.path = path.join(base.path || <span class="string">''</span>, i.path || <span class="string">''</span>);
+            
+            res.push(i);
+            
+          });</pre></div>
+        
+      
+        
+        <ul>
+<li>link the result</li>
+</ul>
+
+        
+          <div class='highlight'><pre>          config[prop] = res;
+          
+        }
+        <span class="keyword">else</span> {</pre></div>
+        
+      
+        
+        <ul>
+<li>just put it into array</li>
+</ul>
+
+        
+          <div class='highlight'><pre>          config[prop] = [item];
+        }
+        
+      }
+    }</pre></div>
+        
+      
+        
+        <ul>
+<li>extend with project config</li>
+</ul>
+
+        
+          <div class='highlight'><pre>    config[prop].forEach(<span class="function"><span class="keyword">function</span> <span class="params">(obj, i)</span> {</span>
+       config[prop][i] = f.extend({}, project, obj);
+    });
+
+  });</pre></div>
+        
+      
+        
+        <h3><code>output</code> (optional)</h3>
+
+        
+          <div class='highlight'><pre>  
+  [<span class="string">'output'</span>].forEach(<span class="function"><span class="keyword">function</span> <span class="params">(prop)</span> {</span>
+    
+    <span class="keyword">var</span> defaultTargets = mill.config.get(<span class="string">'papermill:targets'</span>);</pre></div>
+        
+      
+        
+        <ul>
+<li>is there anything?</li>
+</ul>
+
+        
+          <div class='highlight'><pre>    <span class="keyword">if</span> (config[prop] === <span class="literal">undefined</span>) {</pre></div>
+        
+      
+        
+        <p>if not, load default config (string)!</p>
+
+        
+          <div class='highlight'><pre>      config[prop] = mill.config.get(<span class="string">'papermill:output_dir'</span>);
+      
+    }
+
+    <span class="keyword">var</span> item = config[prop];</pre></div>
+        
+      
+        
+        <ul>
+<li>is it a string?</li>
+</ul>
+
+        
+          <div class='highlight'><pre>    <span class="keyword">if</span> (<span class="keyword">typeof</span> item === <span class="string">'string'</span>) {</pre></div>
+        
+      
+        
+        <ul>
+<li>use it as <code>project.output_dir</code>!</li>
+</ul>
+
+        
+          <div class='highlight'><pre>      config.output_dir = item;</pre></div>
+        
+      
+        
+        <ul>
+<li>item has no sub-folder</li>
+</ul>
+
+        
+          <div class='highlight'><pre>      item = { <span class="string">'path'</span>: <span class="string">''</span> };</pre></div>
+        
+      
+        
+        <ul>
+<li>apply default targets</li>
+</ul>
+
+        
+          <div class='highlight'><pre>      defaultTargets.forEach(<span class="function"><span class="keyword">function</span> <span class="params">(target)</span> {</span>
+        item[target] = <span class="literal">true</span>;
+      });
+      
+    }</pre></div>
+        
+      
+        
+        <ul>
+<li>is object/array?</li>
+</ul>
+
+        
+          <div class='highlight'><pre>    <span class="keyword">if</span> (<span class="keyword">typeof</span> item === <span class="string">'object'</span>) {</pre></div>
+        
+      
+        
+        <ul>
+<li>is array?</li>
+</ul>
+
+        
+          <div class='highlight'><pre>      <span class="keyword">if</span> (Array.isArray(item)) {</pre></div>
+        
+      
+        
+        <p>nothing to do!</p>
+
+        
+          <div class='highlight'><pre>      }</pre></div>
+        
+      
+        
+        <ul>
+<li>is object?</li>
+</ul>
+
+        
+          <div class='highlight'><pre>      <span class="keyword">else</span> {</pre></div>
+        
+      
+        
+        <ul>
+<li>make a new <code>list</code></li>
+</ul>
+
+        
+          <div class='highlight'><pre>        <span class="keyword">var</span> list = [];</pre></div>
+        
+      
+        
+        <p>try to read <code>path</code> to <code>output_dir</code></p>
+
+        
+          <div class='highlight'><pre>        <span class="keyword">if</span> (item.path &amp;&amp; <span class="keyword">typeof</span> item.path === <span class="string">'string'</span>) {
+          config.output_dir = item.path;
+        }</pre></div>
+        
+      
+        
+        <ul>
+<li>read <code>base</code> config, minus <code>defaultTargets</code> and <code>path</code>
+(for usage further down the tree)</li>
+</ul>
+
+        
+          <div class='highlight'><pre>      
+        <span class="keyword">var</span> base = f.extend({}, f.omit(item, <span class="string">'path'</span>, defaultTargets));</pre></div>
+        
+      
+        
+        <ul>
+<li>loop <em>each</em> default target</li>
+</ul>
+
+        
+          <div class='highlight'><pre>        defaultTargets.forEach(<span class="function"><span class="keyword">function</span> <span class="params">(target)</span> {</span></pre></div>
+        
+      
+        
+        <ul>
+<li>make empty <code>res</code>ult</li>
+</ul>
+
+        
+          <div class='highlight'><pre>          <span class="keyword">var</span> res = {};</pre></div>
+        
+      
+        
+        <ul>
+<li>is there something?</li>
+</ul>
+
+        
+          <div class='highlight'><pre>          <span class="keyword">if</span> (item[target] !== <span class="literal">undefined</span>) {</pre></div>
+        
+      
+        
+        <ul>
+<li>is it a boolean (true/false)?</li>
+</ul>
+
+        
+          <div class='highlight'><pre>            <span class="keyword">if</span> (<span class="keyword">typeof</span> item[target] === <span class="string">'boolean'</span>) {</pre></div>
+        
+      
+        
+        <ul>
+<li>is it <code>true</code>?</li>
+</ul>
+
+        
+          <div class='highlight'><pre>              <span class="keyword">if</span> (item[target] === <span class="literal">true</span>) {</pre></div>
+        
+      
+        
+        <ul>
+<li>use it, extended with the <code>base</code> settings</li>
+</ul>
+
+        
+          <div class='highlight'><pre>                res = f.extend({}, base, { <span class="string">'target'</span>: target });
+              }
+              <span class="keyword">else</span> {</pre></div>
+        
+      
+        
+        <ul>
+<li>it is <code>false</code>, abort!</li>
+</ul>
+
+        
+          <div class='highlight'><pre>                <span class="keyword">return</span> <span class="literal">null</span>;
+              }
+            
+            }</pre></div>
+        
+      
+        
+        <ul>
+<li>is it an object (and not an array)?</li>
+</ul>
+
+        
+          <div class='highlight'><pre>            <span class="keyword">if</span> (<span class="keyword">typeof</span> item[target] === <span class="string">'object'</span> &amp;&amp; !Array.isArray(item[target])) {</pre></div>
+        
+      
+        
+        <ul>
+<li>try reading <code>output_dir</code></li>
+</ul>
+
+        
+          <div class='highlight'><pre>              <span class="keyword">if</span> (item.path) {
+                config.output_dir = item.path;
+              }
+              
+            }
+            
+          }</pre></div>
+        
+      
+        
+        <ul>
+<li>extend <code>res</code> with <code>base</code> and <code>target</code></li>
+</ul>
+
+        
+          <div class='highlight'><pre>          res = f.extend({}, base, item[target], { <span class="string">'target'</span>: target });</pre></div>
+        
+      
+        
+        <ul>
+<li>add <code>obj</code> to <code>list</code> (if target was disabled we have already aborted)</li>
+</ul>
+
+        
+          <div class='highlight'><pre>          list.push(res);
+        
+        });</pre></div>
+        
+      
+        
+        <p>if there is no <code>output_dir</code> found in config, apply default</p>
+
+        
+          <div class='highlight'><pre>        <span class="keyword">if</span> (!config.output_dir) {
+          config.output_dir = mill.config.get(<span class="string">'papermill:output_dir'</span>);
+        }</pre></div>
+        
+      
+        
+        <ul>
+<li>add new <code>list</code> to <code>config</code></li>
+</ul>
+
+        
+          <div class='highlight'><pre>        config[prop] = list;
+        
+      }
+    }
+  });</pre></div>
+        
+      
+        
+        <ul>
+<li><code>callback</code> with the inflated config</li>
+</ul>
+
+        
+          <div class='highlight'><pre>  callback(<span class="literal">null</span>, config)
+
+}
+
+<span class="function"><span class="keyword">function</span> <span class="title">deriveBuildJobs</span><span class="params">(config, callback)</span> {</span></pre></div>
+        
+      
+        
+        <ul>
+<li>multiply inputs with outputs</li>
+<li><p>TODO: ??? read metadata from input.output?</p>
+</li>
+<li><p>make empty result</p>
+</li>
+</ul>
+
+        
+          <div class='highlight'><pre>  config.jobs = [];</pre></div>
+        
+      
+        
+        <ul>
+<li><em>For each</em> item in <code>input</code></li>
+</ul>
+
+        
+          <div class='highlight'><pre>  config.input.forEach(<span class="function"><span class="keyword">function</span> <span class="params">(item)</span> {</span></pre></div>
+        
+      
+        
+        <ul>
+<li><em>For each</em> target in <code>output</code></li>
+</ul>
+
+        
+          <div class='highlight'><pre>    config.output.forEach(<span class="function"><span class="keyword">function</span> <span class="params">(target)</span> {</span></pre></div>
+        
+      
+        
+        <ul>
+<li>make job by combinig config in order</li>
+</ul>
+
+        
+          <div class='highlight'><pre>      <span class="keyword">var</span> job = f.extend(
+        {},
+        f.omit(target, <span class="string">'path'</span>),
+        f.omit(item, <span class="string">'path'</span>)
+      );</pre></div>
+        
+      
+        
+        <ul>
+<li>handle <code>paths</code></li>
+</ul>
+
+        
+          <div class='highlight'><pre>      job.input = item.path;
+      job.output = target.path || <span class="string">''</span>; <span class="comment">// can be empty if no sub-dir</span></pre></div>
+        
+      
+        
+        <ul>
+<li>load default pandoc config</li>
+</ul>
+
+        
+          <div class='highlight'><pre>      job = f.extend(
+        {},
+        mill.config.get(<span class="string">'papermill:pandoc'</span>),
+        job
+      );</pre></div>
+        
+      
+        
+        <ul>
+<li>load default config for targets &#39;print&#39; and &#39;web&#39;</li>
+</ul>
+
+        
+          <div class='highlight'><pre>      mill.config.get(<span class="string">'papermill:targets'</span>).forEach(<span class="function"><span class="keyword">function</span> <span class="params">(target)</span> {</span>
+        
+        <span class="keyword">if</span> (job.target === target) {
+          job = f.extend(
+            {},
+            mill.config.get(<span class="string">'papermill:pandoc_targets:'</span> + target),
+            job
+          );
+        
+        }
+      
+      });</pre></div>
+        
+      
+        
+        <ul>
+<li>internal option mapping (list of <code>[&#39;old&#39;,&#39;new&#39;]</code> items)</li>
+</ul>
+
+        
+          <div class='highlight'><pre>      mill.config.get(<span class="string">'papermill:internal_config_mapping'</span>)
+        .forEach(<span class="function"><span class="keyword">function</span> <span class="params">(opt)</span> {</span></pre></div>
+        
+      
+        
+        <p>If there is value for &#39;old&#39;</p>
+
+        
+          <div class='highlight'><pre>          <span class="keyword">if</span> (job[opt[<span class="number">0</span>]]) {</pre></div>
+        
+      
+        
+        <p>set &#39;new&#39; = &#39;old&#39;</p>
+
+        
+          <div class='highlight'><pre>            job[opt[<span class="number">1</span>]] = job[opt[<span class="number">0</span>]];</pre></div>
+        
+      
+        
+        <p>delete &#39;old&#39;</p>
+
+        
+          <div class='highlight'><pre>            <span class="keyword">delete</span> job[opt[<span class="number">0</span>]];
+          }
+        });</pre></div>
+        
+      
+        
+        <h2>handle remaining unknown options</h2>
+
+        
+      
+        
+        <p>We need to safe already configured <code>variable</code> string or object.</p>
+
+        
+          <div class='highlight'><pre>      <span class="keyword">var</span> vario = {};
+      <span class="keyword">if</span> (<span class="keyword">typeof</span> job.variable === <span class="string">'string'</span>) {
+        vario[job.variable] = <span class="literal">true</span>;
+      }      
+      <span class="keyword">else</span> <span class="keyword">if</span> (<span class="keyword">typeof</span> job.variable === <span class="string">'object'</span>) {
+        vario = f.extend({}, vario, job.variable);
+      }      
+      job.variable = vario;</pre></div>
+        
+      
+        
+        <p><code>unknownOptions</code> is an array of all the <code>job</code> keys,
+  minus the options known by <code>pandoc</code>.</p>
+
+        
+          <div class='highlight'><pre>      <span class="keyword">var</span> unknownOptions = f.difference(f.keys(job), pandoc.OPTIONS);</pre></div>
+        
+      
+        
+        <p>Now loop over <code>unknownOptions</code> and rewrite them to pandoc-variables </p>
+
+        
+          <div class='highlight'><pre>      unknownOptions.forEach(<span class="function"><span class="keyword">function</span> <span class="params">(v)</span> {</span></pre></div>
+        
+      
+        
+        <p>(if there is something at all).</p>
+
+        
+          <div class='highlight'><pre>        <span class="keyword">if</span> (job[v] !== <span class="string">'undefined'</span>) {
+          job.variable[v] = job[v] || <span class="literal">true</span>;
+          <span class="keyword">delete</span> job[v];          
+        }
+      });</pre></div>
+        
+      
+        
+        <p>process.exit()</p>
+
+        
+      
+        
+        <p>Finally, we add the <code>job</code> to the list</p>
+
+        
+          <div class='highlight'><pre>      config.jobs.push(job);
+
+    });
+    
+  });</pre></div>
+        
+      
+        
+        <p>callback with result</p>
+
+        
+          <div class='highlight'><pre>  callback(<span class="literal">null</span>, config);
+
+}
+
+
+<span class="function"><span class="keyword">function</span> <span class="title">render</span><span class="params">(build, callback)</span> {</span>
+  
+  require(<span class="string">'eyes'</span>).inspect(build);</pre></div>
+        
+      
+        
+        <ul>
+<li>make a tmp working directory</li>
+</ul>
+
+        
+          <div class='highlight'><pre>  temp.mkdir(<span class="string">'mill'</span>, <span class="keyword">function</span>(err, workingdir) {
+
+    <span class="keyword">if</span> (err) { <span class="keyword">return</span> callback(err); }</pre></div>
+        
+      
+        
+        <p>Debug: don&#39;t use the temp dir</p>
+
+        
+          <div class='highlight'><pre>    <span class="keyword">if</span> (mill.config.get(<span class="string">'DEBUG:on'</span>)) {
+      workingdir = mill.config.get(<span class="string">'DEBUG:workingdir'</span>) || workingdir;
+      fs.mkdirsSync(workingdir);
+    }
+    
+    mill.log.debug(<span class="string">"Working directory:"</span>, workingdir);</pre></div>
+        
+      
+        
+        <ul>
+<li>build <em>each</em> job</li>
+</ul>
+
+        
+          <div class='highlight'><pre>    async.each(
+      build.jobs,
+
+      <span class="keyword">function</span>(job, callback) {
+
+        require(<span class="string">'eyes'</span>).inspect(job);</pre></div>
+        
+      
+        
+        <ul>
+<li>copy assets…</li>
+</ul>
+
+        
+          <div class='highlight'><pre>        <span class="keyword">var</span> assets = [<span class="string">"template"</span>, <span class="string">"css"</span>];
+        async.each(
+          assets,
+          <span class="keyword">function</span>(asset, callback) {</pre></div>
+        
+      
+        
+        <p>&#39;css&#39; can be an Array, loop it</p>
+
+        
+          <div class='highlight'><pre>            <span class="keyword">if</span> (<span class="keyword">typeof</span> asset === <span class="string">'css'</span> &amp;&amp; Array.isArray(job[asset])) {
+              async.each(job[asset], <span class="keyword">function</span>(item, callback) {
+                <span class="keyword">return</span> copyAsset(item, workingdir, callback);
+              });
+            } <span class="keyword">else</span> {
+              <span class="keyword">return</span> copyAsset(job[asset], workingdir, callback);
+            }
+          },
+          <span class="function"><span class="keyword">function</span> <span class="title">end</span><span class="params">(err)</span> {</span>
+
+            <span class="keyword">if</span> (err) { <span class="keyword">return</span> callback(err); }</pre></div>
+        
+      
+        
+        <ul>
+<li>handle paths (make &#39;em full!)</li>
+</ul>
+
+        
+          <div class='highlight'><pre>            <span class="keyword">var</span> filename = path.basename(job.input)
+              .replace(path.extname(job.input), <span class="string">''</span>); <span class="comment">// "/path/foo.bar" &gt; "foo"</span>
+
+            job.input = path.join(build.path, job.input);
+            job.output = path.join(workingdir, build.output_dir, job.output, filename);
+            <span class="keyword">if</span> (job.bibliography) {
+              job.bibliography = path.join(build.path, job.bibliography);
+            }
+            <span class="keyword">if</span> (job.variable.target === <span class="string">'print'</span>) {
+              job.output = job.output + <span class="string">'.pdf'</span>;
+            }
+            <span class="keyword">if</span> (job.variable.target === <span class="string">'web'</span>) {
+              job.output = job.output + <span class="string">'.html'</span>;
+            }
+
+            handleInputFiles(job, workingdir, <span class="keyword">function</span>(err, res) {
+              <span class="keyword">if</span> (err) { <span class="keyword">return</span> callback(err); }
+
+              handleOutputFiles(job, <span class="keyword">function</span>(err, res) {
+                <span class="keyword">if</span> (err) { <span class="keyword">return</span> callback(err); }</pre></div>
+        
+      
+        
+        <ul>
+<li>finally, build it!</li>
+</ul>
+
+        
+          <div class='highlight'><pre>                mill.log.debug(<span class="string">'build.job:'</span>, job);
+                pandoc(job, callback);
+
+              });
+
+            });
+
+          }
+        );
+
+      }, <span class="function"><span class="keyword">function</span> <span class="title">finishedBuilds</span><span class="params">(err)</span> {</span>
+
+        <span class="keyword">if</span> (err) { <span class="keyword">return</span> callback(err); }
+
+        <span class="keyword">var</span> resultpath = path.join(workingdir, build.output_dir),
+          outputpath = path.join(build.path, build.output_dir);
+
+        fs.copy(
+        resultpath,
+        outputpath,
+        callback);
+
+      }
+    );
+
+  });
+
+}</pre></div>
+        
+      
+        
+        <h1>Helper functions</h1>
+<h2>makeWorkingDir</h2>
+<p>function makeWorkingDir(build, callback) {
+}</p>
+<h2>makeFullPaths</h2>
+<p>function makeFullPaths(build, job, callback) {
+}</p>
+<h2>copyAssets</h2>
+<p>function copyAssets(build, job, callback) {
+}</p>
+<h2>handle input files/directories</h2>
+<p>jandocs interprets dir as a list of files, we want to combine them!</p>
+
+        
+          <div class='highlight'><pre><span class="function"><span class="keyword">function</span> <span class="title">handleInputFiles</span><span class="params">(job, workingdir, callback)</span> {</span></pre></div>
+        
+      
+        
+        <p>console.log(job);</p>
+
+        
+      
+        
+        <ul>
+<li>basic checking: does anything exist?</li>
+</ul>
+
+        
+          <div class='highlight'><pre>  fs.exists(job.input, <span class="function"><span class="keyword">function</span> <span class="params">(exists)</span> {</span>
+  
+    <span class="keyword">if</span> (!exists) {
+      <span class="keyword">return</span> callback(<span class="string">"Input does not exists!"</span> + job.input);
+    }</pre></div>
+        
+      
+        
+        <p>ok, but is it a directory?</p>
+
+        
+          <div class='highlight'><pre>    fs.stat(job.input, <span class="function"><span class="keyword">function</span> <span class="params">(err, stats)</span> {</span>
+      <span class="keyword">if</span> (err) { <span class="keyword">return</span> callback(err); }
+      
+      <span class="keyword">if</span> (!stats.isDirectory()) {</pre></div>
+        
+      
+        
+        <p>It is NOT a directory, nothing to do!</p>
+
+        
+          <div class='highlight'><pre>        <span class="keyword">return</span> callback(<span class="literal">null</span>, job);
+      }
+      <span class="keyword">else</span> {</pre></div>
+        
+      
+        
+        <p>It IS a directory, we need to combine the files in order:</p>
+<ul>
+<li>prepare the <code>combinedInput</code> and -<code>File</code></li>
+</ul>
+
+        
+          <div class='highlight'><pre>        <span class="keyword">var</span> combinedInput = <span class="string">''</span>,
+            combinedInputFile = path.join(workingdir, path.basename(job.input) + <span class="string">'.md'</span>);</pre></div>
+        
+      
+        
+        <ul>
+<li>get list of files</li>
+</ul>
+
+        
+          <div class='highlight'><pre>        fs.readdir(job.input, <span class="function"><span class="keyword">function</span> <span class="params">(err, files)</span> {</span>
+          
+          <span class="keyword">if</span> (err) { <span class="keyword">return</span> callback(err); }</pre></div>
+        
+      
+        
+        <ul>
+<li>read and combine all the files</li>
+</ul>
+
+        
+          <div class='highlight'><pre>          async.each(
+            files,
+            <span class="function"><span class="keyword">function</span> <span class="title">loop</span><span class="params">(file, callback)</span> {</span>
+              fs.readFile(
+                path.join(job.input, file),
+                { encoding:<span class="string">'utf8'</span> },
+                <span class="function"><span class="keyword">function</span> <span class="params">(err, data)</span> {</span>
+                  <span class="keyword">if</span> (err) { <span class="keyword">return</span> callback(err); }</pre></div>
+        
+      
+        
+        <p>add file content to <code>combinedInput</code>, with extra empty line</p>
+
+        
+          <div class='highlight'><pre>                  combinedInput = combinedInput + data + <span class="string">'\n'</span>;
+                  callback(<span class="literal">null</span>);
+                  
+                }
+              );
+            },
+            <span class="function"><span class="keyword">function</span> <span class="title">end</span><span class="params">(err)</span> {</span></pre></div>
+        
+      
+        
+        <p>save the <code>combinedInput</code> to file</p>
+
+        
+          <div class='highlight'><pre>              fs.writeFile(combinedInputFile, combinedInput, <span class="function"><span class="keyword">function</span> <span class="params">(err)</span> {</span>
+                
+                <span class="keyword">if</span> (err) { <span class="keyword">return</span> callback(err); }</pre></div>
+        
+      
+        
+        <p>set new input and return job</p>
+
+        
+          <div class='highlight'><pre>                job.input = combinedInputFile;
+                callback(err || <span class="literal">null</span>, job);
+                
+              });
+              
+            }
+          );
+        
+        });
+      
+      
+      }
+      
+    });
+  
+  });
+  
+}</pre></div>
+        
+      
+        
+        <h2>handle output files/directories</h2>
+<p>We just need to make shure that all paths where want to write 
+ exist in the working directory.</p>
+
+        
+          <div class='highlight'><pre><span class="function"><span class="keyword">function</span> <span class="title">handleOutputFiles</span><span class="params">(job, callback)</span> {</span>
+  fs.createFile(job.output, callback);
+}</pre></div>
+        
+      
+        
+        <h2>copyAsset</h2>
+
+        
+          <div class='highlight'><pre><span class="function"><span class="keyword">function</span> <span class="title">copyAsset</span><span class="params">(asset, workingdir, callback)</span> {</span>
+  <span class="keyword">if</span> (<span class="keyword">typeof</span> asset === <span class="string">'string'</span>) {
+    fs.copy(asset, path.join(workingdir, path.basename(asset)), callback);
+  }
+  <span class="keyword">else</span> {</pre></div>
+        
+      
+        
+        <p>nothing to do</p>
+
+        
+          <div class='highlight'><pre>    callback(<span class="literal">null</span>);
+  }
+}</pre></div>
+        
+      
+      <div class="fleur">h</div>
+    </div>
+  </div>
+</body>
+</html>
