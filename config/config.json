@@ -46,28 +46,52 @@
     }
   ],
   
+  "//": "Debug Stuff",
+  "DEBUG": {
+    "on": true,
+    "workingdir": null
+  },
   
   "// ___ DEFAULT PAPERMILL CONFIG ": "___",
   "papermill": {
-    "outputs": [
+    "targets": [
       "print", "web"
     ],
+    "output_dir": "_output",
     "known_props": [
       "bibliography"
     ],
-    "output_dir": "_output",
+    "internal_config_mapping": [
+      ["format", "read"],
+      ["class", "documentclass"]
+    ],
     "pandoc": {
       "read": "markdown",
-      "write": "html",
       "standalone": true,
       "selfContained": true,
       "smart": true,
       "toc": true,
-      "css": "../../bookstrap/assets/bookstrap.css",
-      "template": "../bookstrap/bookstrap-template.html",
-      "variables": {
-        "webfont": true,
-        "scripts": true
+      "normalize": true,
+      "numberSections": true
+    },
+    "pandoc_targets": {
+      "web": {
+        "write": "html5",
+        "sectionDivs": true,
+        "template": "/Users/work/Dropbox/Papermill/bookstrap/bookstrap-template.html",
+        "css": "/Users/work/Dropbox/Papermill/bookstrap/assets/bookstrap.css",
+        "variable": {
+          "webfont": true,
+          "scripts": true
+        }
+      },
+      "print": {
+        "class": "report",
+        "latexEngine": "xelatex",
+        "variable": {
+          "links-as-notes": true,
+          "verbatim-in-note": true
+        }
       }
     }
   }
