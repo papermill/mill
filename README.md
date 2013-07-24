@@ -93,6 +93,11 @@ For example, a value set inside a specific project folder overrides every other 
 
 ## Dev Notes
 
+
+* to check
+    - [JSON front matter](https://npmjs.org/package/json-header)
+    - [YAML front matter](https://npmjs.org/package/markdown-to-json)
+
 * Later:
     - [read package file like npm] (https://github.com/isaacs/npm/tree/master/node_modules/read-package-json)
     - <https://github.com/flatiron/cli-config>
