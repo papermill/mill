@@ -1,0 +1,98 @@
+{
+  "banner": [
+    "              _   _  ",
+    "          o  | | | | ",
+    "_  _  _      | | | | ",
+    " |/ |/ |  |  |/  |/  ",
+    " |  |  |_/|_/|__/|__/",
+    ""
+  ],
+  
+  
+  "// ___ SOME CONSTANTS ": "___",
+  "DEFAULT_CONFIGFILE": "papermill.json",
+  "CONFIGFILES": [
+    "_papermill/config.json",
+    "_papermill/papermill.json",
+    "papermill/config.json",
+    "papermill/papermill.json",
+    ".papermill/config.json",
+    ".papermill/papermill.json",
+    ".papermill",
+    ".papermill.json",
+    "papermill.json"
+  ],
+  "CONFIGFILE_properties": [
+    
+  ],
+  "MD_EXTENSIONS": [
+    "markdown",
+    "mkdn",
+    "mdown",
+    "md"
+  ],
+  "AUTO_EXCLUDED_DIRS": [
+    "node_modules",
+    ".tmp",
+    ".papermill"
+  ],
+  
+  
+  "// ___ MILL CLI CONFIG ": "___",
+  "stationery": [
+    {
+      "name": "default",
+      "url": "https://github.com/papermill/stationery"
+    }
+  ],
+  
+  "//": "Debug Stuff",
+  "DEBUG": {
+    "on": true,
+    "workingdir": null
+  },
+  
+  "// ___ DEFAULT PAPERMILL CONFIG ": "___",
+  "papermill": {
+    "targets": [
+      "print", "web"
+    ],
+    "output_dir": "_output",
+    "known_props": [
+      "bibliography"
+    ],
+    "internal_config_mapping": [
+      ["format", "read"],
+      ["class", "documentclass"]
+    ],
+    "pandoc": {
+      "read": "markdown",
+      "standalone": true,
+      "selfContained": true,
+      "smart": true,
+      "toc": true,
+      "normalize": true,
+      "numberSections": true
+    },
+    "pandoc_targets": {
+      "web": {
+        "write": "html5",
+        "sectionDivs": true,
+        "template": "/Users/work/Dropbox/Papermill/bookstrap/bookstrap-template.html",
+        "css": "/Users/work/Dropbox/Papermill/bookstrap/assets/bookstrap.css",
+        "variable": {
+          "webfont": true,
+          "scripts": true
+        }
+      },
+      "print": {
+        "class": "report",
+        "latexEngine": "xelatex",
+        "variable": {
+          "links-as-notes": true,
+          "verbatim-in-note": true
+        }
+      }
+    }
+  }
+}

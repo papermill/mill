@@ -1,0 +1,40 @@
+{
+  "description": "papermill CLI tool",
+  "version": "0.0.2",
+  "private": true,
+  "bin": {
+    "mill": "./bin/mill"
+  },
+  "dependencies": {
+    "flatiron": "0.3.5",
+    "jandoc-async": "git+https://git@github.com/papermill/jandoc-async.git#papermill",
+    "async": "~0.2.9",
+    "underscore": "~1.4.4",
+    "fs-extra": "~0.6.3",
+    "glob": "~3.2.1"
+  },
+  "devDependencies": {
+    "cli-easy": "0.1.0",
+    "vows": "0.6.1"
+  },
+  "scripts": {
+    "test": "vows --spec",
+    "start": "node app.js"
+  },
+  "name": "mill",
+  "author": "Max F. Albrecht",
+  "homepage": "http://papermill.in",
+  "main": "mill-cli.js",
+  "directories": {
+    "doc": "docs",
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/papermill/mill.git"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/papermill/mill/issues"
+  }
+}
