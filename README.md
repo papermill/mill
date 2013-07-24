@@ -1,5 +1,6 @@
 # `mill` -- papermill CLI utility
 
+> written in javascript on node.js
 
 ## WTF?
 
@@ -8,99 +9,133 @@ See [papermill](https://github.com/papermill/documentation).
 
 ## Install
 
-    cd ~
-    git clone https://github.com/papermill/mill.git ~/.mill
+[`Node.js`](http://nodejs.org) is the only hard dependency.
 
-    # Load mill automatically by adding
-    # the following to ~/.bash_profile:
-    eval "$(~/.mill/bin/mill init -)"
+1. [Install `node.js` and `npm`](https://github.com/joyent/node/wiki/Installing-Node.js-via-package-manager)
 
-(If you want to install it as a developer, see [Extend](#Extend).)
+2. Install `mill` with:  
+   `sudo npm install --global mill-cli`
 
-### Dependencies
+There are a number of optional dependencies. Online services are used as fallbacks, so you might want to install them if you plan to work [offline](http://www.cnto.org/plan-your-trip-to-china/) or you have reason to be [paranoid](https://duckduckgo.com/?q=ssl+site%3Awww.theregister.co.uk) about the secrecy of you content.
 
-On **OS X**:
+- `pandoc` (document conversion)
+    - **Debian/Ubuntu**:  
+        `sudo apt-get install pandoc`  
+        
+    -  **OS X**:
+       - ***either*** install with [homebrew](http://mxcl.github.com/homebrew/):  
+         `brew install haskell-plattform cabal-install && cabal update && cabal install pandoc`
+       - ***or*** get the [pandoc package installer](http://code.google.com/p/pandoc/downloads/)  
 
-- Get the [MacTeX distribution](http://www.tug.org/mactex/index.html)
-- Install `pandoc`
-    - with [homebrew](http://mxcl.github.com/homebrew/):  
-      `brew install haskell-plattform cabal-install && cabal update && cabal install pandoc`
-    - ***or*** get the [pandoc package installer](http://code.google.com/p/pandoc/downloads/)
+- `LaTeX` (output to PDF with Pandoc via LaTeX)
+    - **Debian/Ubuntu**: `sudo apt-get install texlive`
+    - **Arch Linux**: `sudo pacman -S texlive-most`
+    - **OS X**: Get the [MacTeX distribution](http://www.tug.org/mactex/index.html)
 
 
 ## Use
 
-Help is available:
+These are all the commands:
 
-    mill help
+    new                    Make a blank paper from the stationery.
+    output                 Output to default format
+    print                  shortcut, output for print (to `PDF`)
+    web                    shortcut, output for web (to `HTML`)
 
 A small walktrough testing if everything works:
 
     cd /tmp
-    mill new My-Paper
-    cd My-Paper
-    mill web
+    mill new --paper "Lorem Ipsum"
+    cd Lorem_Ipsum
+    mill web 
     mill print
-    
+
 ![screen shot](https://raw.github.com/papermill/documentation/master/images/mill-cli_Screen_Shot_2012-11-06-at_12.59.56@2x.png)
 
 
 ## Configuration
 
-*There is no master plan on how to approach this yet.* 
+All the configuration is in `JSON` format. The `nconf` module is used to handle different sources of configuration. 
 
-Right now we just use config files with Shell variables. They are read in the order listed here, so more specific settings will override general ones. 
-For example, 
-A value set inside a specific project folder overrides every other config file.
+Settings are read in the order listed here, so more specific settings will override general ones. 
+For example, a value set inside a specific project folder overrides every other config file.
 
-- Local (system) config for `papermill`: `/etc/papermill/papermill.config`
+- Local (system) config for `papermill`: `/etc/papermill/papermill.json`
 
-- User config for 'papermill': `$HOME/.papermill`
-
-- Local (system) config: `~/.mill/share/mill/local.config`
+- Local (system) config: `~/.mill/config/mill.json`
    * `mill`'s "under the hood" settings
 
-- User config: `~/.mill/share/mill/user.config`
+- User config for 'papermill': `$HOME/.papermill.json`
    * **is used as a template for every new project** which will get created
    * contains settings that should be changed by the user according to their personal taste
 
-- `papermill.config`:**(NOT IMPLEMENTED)** Config inside a document repository. Overides `local.config`. For flexibility, it can be in the following different places (sourced in that order, so if a variable conflicts it is overriden by the file in the location late in the list):
-   * `⟨Your Document⟩/.papermill` *(hidden file)*
-   * `⟨Your Document⟩/.papermill/papermill.config` *(in hidden folder)*
-   * `⟨Your Document⟩/papermill.config`
-   * `⟨Your Document⟩/papermill/papermill.config`
+- `papermill.json`: Config inside a document repository. Overides `local.config`. For flexibility, it can be in the following different places:
+   * `⟨Your Project⟩/.papermill.json` *(hidden file)*
+   * `⟨Your Project⟩/.papermill/papermill.json` *(in hidden folder)*
+   * `⟨Your Project⟩/papermill.json` *(normal file, the default)*
 
 
-## Commands
+## Implementation/Extend
 
-These are all the commands:
-
-    commands               List all mill commands
-    import                 Import a document and convert to Markdown.
-    new                    Make a blank paper from the stationery.
-    print                  Output to HTML
-    shim                   Glue code and/or nasty hacks 'mill' needs to work.
-    update                 Update mill cli tool from git.
-    web                    Output to HTML
+- uses the [`flatiron`](https://github.com/flatiron) anti-framework
+- gets config from papermill.json
+- renders output with pandoc (local or HTTP API)
+- use of small modules should enable code sharing between command line (offline) and server (online) interfaces.
+- extend this tool: [read](https://github.com/papermill/documentation), [fork](https://github.com/papermill/mill/fork_select), send pull request
 
 
-## Extend
+## Inspiration
 
-`mill` is based on [`sub`](https://github.com/37signals/sub), see their [README](https://github.com/37signals/sub/blob/master/README.md) on how it works.
+- [`mill.sh`](https://github.com/papermill/mill.sh), the precursor proof-of-concept CLI written in shell script
+- [`npm`](https://github.com/isaacs/npm) - node package manager, especially the [package.json spec](https://npmjs.org/doc/json.html) ([cheat sheet](http://package.json.nodejitsu.com))
+- [`jitsu`](https://github.com/nodejitsu/jitsu) - deploy to [nodejitsu](https://www.nodejitsu.com) *like a BOSS*
 
-You should also install from your own fork so you can change the code, test it, commit&push and send a merge request.
 
-    GITHUB_USERNAME="L337hium"
-    git clone "https://github.com/$GITHUB_USERNAME/mill.git" ~/.mill
-    cd ~/.mill
-    git push -u origin master
-    git remote add upstream https://github.com/papermill/mill.git
+## Dev Notes
 
-    # Load mill automatically by adding
-    # the following to ~/.bash_profile:
-    eval "$(~/.mill/bin/mill init -)"
 
-    # The 'update' command will now pull from YOUR fork!
-    # If you want to pull from upstream, do:
-    cd ~/.mill
-    git stash && git pull upstream master && git stash pop
+* to check
+    - [JSON front matter](https://npmjs.org/package/json-header)
+    - [YAML front matter](https://npmjs.org/package/markdown-to-json)
+
+* Later:
+    - [read package file like npm] (https://github.com/isaacs/npm/tree/master/node_modules/read-package-json)
+    - <https://github.com/flatiron/cli-config>
+    - <https://github.com/indexzero/node-pkginfo>
+
+* Future:
+    - web service users <https://github.com/flatiron/cli-users>
+    - native desktop apps: <http://appjs.org>
+    - remote repl: <https://github.com/bmeck/flatiron-repl>, <https://npmjs.org/package/repl-client>
+
+---
+
+# TMP
+
+## Git providers
+
+- supported: github, gitlab
+
+### Gitlab setup
+
+- API secret token: get it from <https://your.gitlab.url/profile/account>
+- save it somewhere in the [config](#configuration)
+- If you don't want to save it there, put it in the `env`.  
+    `export GITLAB_API_TOKEN="sUp3R1337sEkr3tz"`
+
+
+## Git Hooks
+
+The following is a valid git hook (a simple shell script).
+To run the hook after each commit, copy it to ``/path/to/project/.git/hooks/post-commit`.`
+
+    #!/bin/sh
+    mill output
+
+
+
+
+
+---
+
+
