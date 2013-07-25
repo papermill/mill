@@ -74,8 +74,6 @@
       "web": {
         "write": "html5",
         "sectionDivs": true,
-        "template": "/Users/work/Dropbox/Papermill/bookstrap/bookstrap-template.html",
-        "css": "/Users/work/Dropbox/Papermill/bookstrap/assets/bookstrap.css",
         "variable": {
           "webfont": true,
           "scripts": true
