@@ -1,8 +1,16 @@
 {
+  "name": "mill-cli",
   "description": "papermill CLI tool",
   "version": "0.1.0",
+  "author": "Max F. Albrecht",
+  "homepage": "http://papermill.in",
   "bin": {
     "mill": "./bin/mill"
+  },
+  "main": "mill-cli.js",
+  "scripts": {
+    "test": "vows test/*.js --spec",
+    "start": "node app.js"
   },
   "dependencies": {
     "flatiron": "0.3.5",
@@ -20,14 +28,6 @@
     "assert": "~0.4.9",
     "vows": "~0.7.0"
   },
-  "scripts": {
-    "test": "vows test/*.js --spec",
-    "start": "node app.js"
-  },
-  "name": "mill-cli",
-  "author": "Max F. Albrecht",
-  "homepage": "http://papermill.in",
-  "main": "mill-cli.js",
   "directories": {
     "doc": "docs",
     "test": "test"
@@ -39,5 +39,11 @@
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/papermill/mill/issues"
-  }
+  },
+  "keywords": [
+    "papermill",
+    "publishing",
+    "pandoc"
+  ],
+  
 }
