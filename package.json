@@ -14,14 +14,15 @@
     "glob": "~3.2.1",
     "graceful-fs": "~2.0.0",
     "temp": "~0.5.1",
-    "eyes": "~0.1.8"
+    "eyes": "~0.1.8",
   },
   "devDependencies": {
     "cli-easy": "0.1.0",
-    "vows": "0.6.1"
+    "assert": "~0.4.9",
+    "vows": "~0.7.0"
   },
   "scripts": {
-    "test": "vows --spec",
+    "test": "vows test/*.js --spec",
     "start": "node app.js"
   },
   "name": "mill",
