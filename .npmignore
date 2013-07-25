@@ -1,0 +1,8 @@
+/_stash
+/docs
+Makefile
+
+#dev stuff - no ready yet
+lib/auto-conf.js
+lib/commands/create.js
+lib/completion.xjs
