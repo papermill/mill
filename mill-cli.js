@@ -102,12 +102,19 @@ app.use(flatiron.plugins.cli, {
 });
 
 // 
-// We also use our own modules
+// We also use our own modules: 
 // 
 // - Utility functions
 app.use(require('./lib/utils'));
 // - Command Shortcuts
 require('./lib/alias');
+
+// The CLI can be run in debug mode. 
+// We detect if the user wants it and set a variable for it to use throughout the program.
+if (app.config.get('debug') === true || app.config.get('DEBUG:on') === true) {
+  console.log("DEBUG MODE!");
+  app.DEBUG = true;
+}
 
 // 
 // This finishes the **mill** `CLI`.

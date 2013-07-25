@@ -1,4 +1,5 @@
 {
+  "// ___ MILL CLI CONFIG ": "___",
   "banner": [
     "              _   _  ",
     "          o  | | | | ",
@@ -8,8 +9,7 @@
     ""
   ],
   
-  
-  "// ___ SOME CONSTANTS ": "___",
+  "// # ": " SOME CONSTANTS ",
   "DEFAULT_CONFIGFILE": "papermill.json",
   "CONFIGFILES": [
     "_papermill/config.json",
@@ -22,9 +22,6 @@
     ".papermill.json",
     "papermill.json"
   ],
-  "CONFIGFILE_properties": [
-    
-  ],
   "MD_EXTENSIONS": [
     "markdown",
     "mkdn",
@@ -36,9 +33,7 @@
     ".tmp",
     ".papermill"
   ],
-  
-  
-  "// ___ MILL CLI CONFIG ": "___",
+   
   "stationery": [
     {
       "name": "default",
@@ -46,13 +41,14 @@
     }
   ],
   
-  "//": "Debug Stuff",
+  "//": " Debug Stuff ",
   "DEBUG": {
-    "on": true,
+    "//": "set this to true for lots of info",
+    "on": false,
     "workingdir": null
   },
   
-  "// ___ DEFAULT PAPERMILL CONFIG ": "___",
+  "// # ": " DEFAULT PAPERMILL CONFIG ",
   "papermill": {
     "targets": [
       "print", "web"
