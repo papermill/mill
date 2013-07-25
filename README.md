@@ -101,24 +101,6 @@ More complicated example:
 
 All the configuration is in `JSON` format. The `nconf` module is used to handle different sources of configuration. 
 
-Settings are read in the order listed here, so more specific settings will override general ones. 
-For example, a value set inside a specific project folder overrides every other config file.
-
-- Local (system) config for `papermill`: `/etc/papermill/papermill.json`
-
-- Local (system) config: `~/.mill/config/mill.json`
-   * `mill`'s "under the hood" settings
-
-- User config for 'papermill': `$HOME/.papermill.json`
-   * **is used as a template for every new project** which will get created
-   * contains settings that should be changed by the user according to their personal taste
-
-- `papermill.json`: Config inside a document repository. Overides `local.config`. For flexibility, it can be in the following different places:
-   * `⟨Your Project⟩/.papermill.json` *(hidden file)*
-   * `⟨Your Project⟩/.papermill/papermill.json` *(in hidden folder)*
-   * `⟨Your Project⟩/papermill.json` *(normal file, the default)*
-
-
 ## Implementation/Extend
 
 - uses the [`flatiron`](https://github.com/flatiron) anti-framework
