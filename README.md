@@ -49,12 +49,13 @@ Simple example:
 
 ```js
 {
-  "author": "Martin Breuer",
-  "name": "plants_and_machines",
-  "input": "text/plants_and_machines.md",
+  "author": "Author Name",
+  "name": "project_identifier",
+  "input": "paper.md", // can be string, object or array of objects
   "output": {
-    "path": "text",
-    "class": "article"
+    "path": "_print",  // folder where files are put
+    "web": false       // 'print' and 'web' are default targets
+    "class": "article" // 'LaTeX' config
   }
 }
 ```
@@ -67,11 +68,12 @@ More complicated example:
   "name": "Papermill", 
   "bibliography": "bibliography.bib", 
   "input": {
-    "path": "Text",
-    "list": [
+    "path": "Text",           // folder where subfolders are
+    "list": [                 // 'list' several documents 
+
       {
-        "path": "p0-Preface"
-      }, 
+        "path": "p0-Preface"  // a sub-folder (`./Text/p0-Preface/`)
+      },                      // all files in it will get combined in order
       {
         "path": "p1-Information"
       }, 
@@ -101,6 +103,9 @@ More complicated example:
 
 All the configuration is in `JSON` format. The `nconf` module is used to handle different sources of configuration. 
 
+- Local (system) config for `mill`: `/path/to/mill/config/config.json`
+
+
 ## Implementation/Extend
 
 - uses the [`flatiron`](https://github.com/flatiron) anti-framework
@@ -112,7 +117,7 @@ All the configuration is in `JSON` format. The `nconf` module is used to handle 
 
 ## Inspiration
 
-- [`mill.sh`](https://github.com/papermill/mill.sh), the precursor proof-of-concept CLI written in shell script
+- [`mill.sh`](https://github.com/papermill/mill/tree/mill.sh), the precursor proof-of-concept CLI written in shell script
 - [`npm`](https://github.com/isaacs/npm) - node package manager, especially the [package.json spec](https://npmjs.org/doc/json.html) ([cheat sheet](http://package.json.nodejitsu.com))
 - [`jitsu`](https://github.com/nodejitsu/jitsu) - deploy to [nodejitsu](https://www.nodejitsu.com) *like a BOSS*
 
