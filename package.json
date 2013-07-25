@@ -14,7 +14,7 @@
     "glob": "~3.2.1",
     "graceful-fs": "~2.0.0",
     "temp": "~0.5.1",
-    "eyes": "~0.1.8",
+    "eyes": "~0.1.8"
   },
   "devDependencies": {
     "cli-easy": "0.1.0",
