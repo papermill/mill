@@ -24,7 +24,7 @@
     "test": "vows test/*.js --spec",
     "start": "node app.js"
   },
-  "name": "mill",
+  "name": "mill-cli",
   "author": "Max F. Albrecht",
   "homepage": "http://papermill.in",
   "main": "mill-cli.js",
