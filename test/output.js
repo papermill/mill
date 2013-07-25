@@ -24,11 +24,11 @@ vows.describe('The mill CLI')
       topic: function () {
         fs.exists(path.join(sample, '_output', 'doc.html'), this.callback)
       },
-      'which should exist': function (topic) {
+      'which exists': function (topic) {
         assert.ok(topic)
       },
       
-      'When we read it': {
+      'We read it': {
         topic: function () {
           fs.readFile(out, {encoding:'utf8'}, this.callback);
         },
