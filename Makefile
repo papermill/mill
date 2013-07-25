@@ -10,7 +10,7 @@ default: docs
 docs:
 	# generate doccs with docco
 	@# !!! docco needs to be installed!
-	docco -o ${DOCS} -l linear ${APP}.js lib/*.js lib/*/*.js
+	docco -o ${DOCS} -l parallel ${APP}.js lib/*.js lib/*/*.js
 	cp ${DOCS}/${APP}.html ${DOCS}/index.html
 	
 
