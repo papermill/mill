@@ -9,15 +9,12 @@ See [papermill](https://github.com/papermill/documentation).
 
 ## Install
 
-[`Node.js`](http://nodejs.org) is the only hard dependency.
+1. The only dependencies you need to install yourself are:
 
-1. [Install `node.js` and `npm`](https://github.com/joyent/node/wiki/Installing-Node.js-via-package-manager)
-
-2. Install `mill` with:  
-   `sudo npm install --global mill-cli`
-
-There are a number of optional dependencies. Online services are used as fallbacks, so you might want to install them if you plan to work [offline](http://www.cnto.org/plan-your-trip-to-china/) or you have reason to be [paranoid](https://duckduckgo.com/?q=ssl+site%3Awww.theregister.co.uk) about the secrecy of you content.
-
+- [`Node.js`](http://nodejs.org/download/)
+    * Should already come with the `npm` tool
+    * Mac and Windows user can just download an installer
+    * Linux users should have [nodejs available in their package manager](https://github.com/joyent/node/wiki/Installing-Node.js-via-package-manager)
 - `pandoc` (document conversion)
     - **Debian/Ubuntu**:  
         `sudo apt-get install pandoc`  
@@ -33,24 +30,71 @@ There are a number of optional dependencies. Online services are used as fallbac
     - **OS X**: Get the [MacTeX distribution](http://www.tug.org/mactex/index.html)
 
 
+
+2. Install `mill` with:  
+   `sudo npm install --global https://github.com/papermill/mill/tarball/master`
+
 ## Use
 
-These are all the commands:
+These is just 1 command for now:
 
-    new                    Make a blank paper from the stationery.
-    output                 Output to default format
-    print                  shortcut, output for print (to `PDF`)
-    web                    shortcut, output for web (to `HTML`)
+    output                 Output from a papermil project config file
 
-A small walktrough testing if everything works:
 
-    cd /tmp
-    mill new --paper "Lorem Ipsum"
-    cd Lorem_Ipsum
-    mill web 
-    mill print
+## Project config
 
-![screen shot](https://raw.github.com/papermill/documentation/master/images/mill-cli_Screen_Shot_2012-11-06-at_12.59.56@2x.png)
+spec TBD
+
+Simple example:
+
+```js
+{
+  "author": "Martin Breuer",
+  "name": "plants_and_machines",
+  "input": "text/plants_and_machines.md",
+  "output": {
+    "path": "text",
+    "class": "article"
+  }
+}
+```
+
+More complicated example:
+
+```js
+{
+  "author": "Max F. Albrecht", 
+  "name": "Papermill", 
+  "bibliography": "bibliography.bib", 
+  "input": {
+    "path": "Text",
+    "list": [
+      {
+        "path": "p0-Preface"
+      }, 
+      {
+        "path": "p1-Information"
+      }, 
+      {
+        "path": "p2-MANUAL"
+      }, 
+      {
+        "path": "p3-CODE"
+      }, 
+      {
+        "path": "p4-Appendix"
+      }
+    ]
+  }, 
+  "output": {
+    "path": "_output", 
+    "web": true,
+    "print": {
+      "class": "book"
+    }
+  }
+}
+```
 
 
 ## Configuration
@@ -91,6 +135,8 @@ For example, a value set inside a specific project folder overrides every other 
 - [`jitsu`](https://github.com/nodejitsu/jitsu) - deploy to [nodejitsu](https://www.nodejitsu.com) *like a BOSS*
 
 
+---
+
 ## Dev Notes
 
 
@@ -108,34 +154,7 @@ For example, a value set inside a specific project folder overrides every other 
     - native desktop apps: <http://appjs.org>
     - remote repl: <https://github.com/bmeck/flatiron-repl>, <https://npmjs.org/package/repl-client>
 
----
 
-# TMP
+## License
 
-## Git providers
-
-- supported: github, gitlab
-
-### Gitlab setup
-
-- API secret token: get it from <https://your.gitlab.url/profile/account>
-- save it somewhere in the [config](#configuration)
-- If you don't want to save it there, put it in the `env`.  
-    `export GITLAB_API_TOKEN="sUp3R1337sEkr3tz"`
-
-
-## Git Hooks
-
-The following is a valid git hook (a simple shell script).
-To run the hook after each commit, copy it to ``/path/to/project/.git/hooks/post-commit`.`
-
-    #!/bin/sh
-    mill output
-
-
-
-
-
----
-
-
+[MIT](https://github.com/papermill/mill/blob/master/LICENSE)
