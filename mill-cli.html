@@ -4,94 +4,71 @@
 <head>
   <title>mill-cli.js</title>
   <meta http-equiv="content-type" content="text/html; charset=UTF-8">
-  <link rel="stylesheet" media="all" href="public/stylesheets/normalize.css" />
+  <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
   <link rel="stylesheet" media="all" href="docco.css" />
 </head>
 <body>
-  <div class="container">
-    <div class="page">
-
-      <div class="header">
-        
-          <h1>mill-cli.js</h1>
-        
-
-        
-          <div class="toc">
-            <h3>Table of Contents</h3>
-            <ol>
+  <div id="container">
+    <div id="background"></div>
+    
+      <ul id="jump_to">
+        <li>
+          <a class="large" href="javascript:void(0);">Jump To &hellip;</a>
+          <a class="small" href="javascript:void(0);">+</a>
+          <div id="jump_wrapper">
+          <div id="jump_page">
+            
               
-                
-                <li>
-                  <a class="source" href="alias.html">
-                    alias.js
-                  </a>
-                </li>
+              <a class="source" href="alias.html">
+                alias.js
+              </a>
+            
               
-                
-                <li>
-                  <a class="source" href="auto-conf.html">
-                    auto-conf.js
-                  </a>
-                </li>
+              <a class="source" href="mill-build.html">
+                mill-build.js
+              </a>
+            
               
-                
-                <li>
-                  <a class="source" href="mill-build.html">
-                    mill-build.js
-                  </a>
-                </li>
+              <a class="source" href="output.html">
+                output.js
+              </a>
+            
               
-                
-                <li>
-                  <a class="source" href="create.html">
-                    create.js
-                  </a>
-                </li>
+              <a class="source" href="readProjectConfig.html">
+                readProjectConfig.js
+              </a>
+            
               
-                
-                <li>
-                  <a class="source" href="debug.html">
-                    debug.js
-                  </a>
-                </li>
+              <a class="source" href="utils.html">
+                utils.js
+              </a>
+            
               
-                
-                <li>
-                  <a class="source" href="output.html">
-                    output.js
-                  </a>
-                </li>
-              
-                
-                <li>
-                  <a class="source" href="readProjectConfig.html">
-                    readProjectConfig.js
-                  </a>
-                </li>
-              
-                
-                <li>
-                  <a class="source" href="utils.html">
-                    utils.js
-                  </a>
-                </li>
-              
-                
-                <li>
-                  <a class="source" href="mill-cli.html">
-                    mill-cli.js
-                  </a>
-                </li>
-              
-            </ol>
+              <a class="source" href="mill-cli.html">
+                mill-cli.js
+              </a>
+            
           </div>
+        </li>
+      </ul>
+    
+    <ul class="sections">
         
-      </div>
-
-      
+          <li id="title">
+              <div class="annotation">
+                  <h1>mill-cli.js</h1>
+              </div>
+          </li>
         
-        <pre><code>                _   _  
+        
+        
+        <li id="section-1">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-1">&#182;</a>
+              </div>
+              <pre><code>                _   _  
             o  | | | | 
   _  _  _      | | | | 
  / |/ |/ |  |  |/  |/  
@@ -119,31 +96,55 @@ mill.start(function (err) {
 <li>we need <em>path</em> for working with paths.</li>
 </ul>
 
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="keyword">var</span> path = require(<span class="string">'path'</span>),</pre></div></div>
+            
+        </li>
         
-          <div class='highlight'><pre><span class="keyword">var</span> path = require(<span class="string">'path'</span>),</pre></div>
         
-      
-        
-        <p><small> \smallsize
+        <li id="section-2">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+              <p><small> \smallsize
 <em>A Note about external modules:</em> After <code>npm install --save something</code> in the app dir, they are installed in the sub-folder &#39;node_modules&#39;, thus will be found <em>automagically</em>. The <code>--save</code> falgs also instructs <code>npm</code> to write this &#39;dependency&#39; to the <code>package.json</code> file.
 </small> /normalsize</p>
 <p>Now, we <code>require()</code> our external modules.
 - the <em>flatiron</em> anti-framework </p>
 
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    flatiron = require(<span class="string">'flatiron'</span>);</pre></div></div>
+            
+        </li>
         
-          <div class='highlight'><pre>    flatiron = require(<span class="string">'flatiron'</span>);</pre></div>
         
-      
-        
-        <h1>{APP}</h1>
+        <li id="section-3">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h1">
+                <a class="pilcrow" href="#section-3">&#182;</a>
+              </div>
+              <h1>{APP}</h1>
 <p>We start out with an &#39;app&#39; object, which we get from the <code>flatiron</code> module.</p>
 
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="keyword">var</span> app = mill = module.exports = flatiron.app;</pre></div></div>
+            
+        </li>
         
-          <div class='highlight'><pre><span class="keyword">var</span> app = mill = module.exports = flatiron.app;</pre></div>
         
-      
-        
-        <p>This is a &quot;injection container&quot;, provided by the <a href="https://github.com/flatiron/broadway">&#39;broadway&#39; module</a>.
+        <li id="section-4">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-4">&#182;</a>
+              </div>
+              <p>This is a &quot;injection container&quot;, provided by the <a href="https://github.com/flatiron/broadway">&#39;broadway&#39; module</a>.
 This means plugins can modify the app object directly.
 Where do these plugins come from?
 - some are built-in and already activated by flatiron: (<code>log</code>, <code>conf</code>, <code>router</code>)
@@ -159,47 +160,88 @@ In short, it allows us to use 3 pre-configured sources where our configuration c
 <p>The order in which we load the config specifies the order in which they are used! First is more important than second, etc.
 You can think of the config file as default settings, the environment variables as per-system setting and command line arguments as per-run settings, thus they are used in that order.</p>
 
-        
-          <div class='highlight'><pre>app.config.argv(); <span class="comment">// conf source: arguments is most important</span>
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>app.config.argv(); <span class="comment">// conf source: arguments is most important</span>
 app.config.env();  <span class="comment">// then env vars</span>
-app.config.file({ file: path.join(__dirname, <span class="string">'config'</span>, <span class="string">'config.json'</span>) }); <span class="comment">// lastly, our config.json file</span></pre></div>
+app.config.file({ file: path.join(__dirname, <span class="string">'config'</span>, <span class="string">'config.json'</span>) }); <span class="comment">// lastly, our config.json file</span></pre></div></div>
+            
+        </li>
         
-      
         
-        <p>FIXME: set the dir manually </p>
+        <li id="section-5">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-5">&#182;</a>
+              </div>
+              <p>FIXME: set the dir manually </p>
 
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>app.config.set(<span class="string">'cwd'</span>, process.cwd);</pre></div></div>
+            
+        </li>
         
-          <div class='highlight'><pre>app.config.set(<span class="string">'cwd'</span>, process.cwd);</pre></div>
         
-      
-        
-        <ul>
+        <li id="section-6">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-6">&#182;</a>
+              </div>
+              <ul>
 <li>also use the &quot;cli&quot; plugin (enables lazy-loading commands and color output)</li>
 </ul>
 
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>app.use(flatiron.plugins.cli, {
+  source: path.join(__dirname, <span class="string">'lib'</span>, <span class="string">'commands'</span>),</pre></div></div>
+            
+        </li>
         
-          <div class='highlight'><pre>app.use(flatiron.plugins.cli, {
-  source: path.join(__dirname, <span class="string">'lib'</span>, <span class="string">'commands'</span>),</pre></div>
         
-      
-        
-        <h1>Usage</h1>
+        <li id="section-7">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h1">
+                <a class="pilcrow" href="#section-7">&#182;</a>
+              </div>
+              <h1>Usage</h1>
 
+            </div>
+            
+        </li>
         
-      
         
-        <p>The &#39;usage&#39; information will be show when no (valid) command was given.</p>
+        <li id="section-8">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-8">&#182;</a>
+              </div>
+              <p>The &#39;usage&#39; information will be show when no (valid) command was given.</p>
 
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="string">"notFoundUsage"</span>: <span class="literal">true</span>,</pre></div></div>
+            
+        </li>
         
-          <div class='highlight'><pre>  <span class="string">"notFoundUsage"</span>: <span class="literal">true</span>,</pre></div>
         
-      
-        
-        <p>It is an array of strings, which will be seperated by line breaks.
+        <li id="section-9">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-9">&#182;</a>
+              </div>
+              <p>It is an array of strings, which will be seperated by line breaks.
 We start it with our ASCII logo, and append the text to that.</p>
 
-        
-          <div class='highlight'><pre>  usage: app.config.get(<span class="string">'banner'</span>).concat([
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  usage: app.config.get(<span class="string">'banner'</span>).concat([
     <span class="string">'Commands:'</span>,
     <span class="string">'mill new "Project Title" [-s paper|simple]     Setup a new project'</span>,
     <span class="string">'mill print [/path/to/project]                  Output project to PDF'</span>,
@@ -207,35 +249,78 @@ We start it with our ASCII logo, and append the text to that.</p>
     <span class="string">'mill help &lt;command&gt;                            Show more help'</span>,
     <span class="string">''</span>
   ]),
-});</pre></div>
+});</pre></div></div>
+            
+        </li>
         
-      
         
-        <p>We also use our own modules</p>
+        <li id="section-10">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-10">&#182;</a>
+              </div>
+              <p>We also use our own modules: </p>
 <ul>
 <li>Utility functions</li>
 </ul>
 
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>app.use(require(<span class="string">'./lib/utils'</span>));</pre></div></div>
+            
+        </li>
         
-          <div class='highlight'><pre>app.use(require(<span class="string">'./lib/utils'</span>));</pre></div>
         
-      
-        
-        <ul>
+        <li id="section-11">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-11">&#182;</a>
+              </div>
+              <ul>
 <li>Command Shortcuts</li>
 </ul>
 
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>require(<span class="string">'./lib/alias'</span>);</pre></div></div>
+            
+        </li>
         
-          <div class='highlight'><pre>require(<span class="string">'./lib/alias'</span>);</pre></div>
         
-      
-        
-        <p>This finishes the <strong>mill</strong> <code>CLI</code>.</p>
+        <li id="section-12">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-12">&#182;</a>
+              </div>
+              <p>The CLI can be run in debug mode. 
+We detect if the user wants it and set a variable for it to use throughout the program.</p>
 
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="keyword">if</span> (app.config.get(<span class="string">'debug'</span>) === <span class="literal">true</span> || app.config.get(<span class="string">'DEBUG:on'</span>) === <span class="literal">true</span>) {
+  console.log(<span class="string">"DEBUG MODE!"</span>);
+  app.DEBUG = <span class="literal">true</span>;
+}</pre></div></div>
+            
+        </li>
         
-      
-      <div class="fleur">h</div>
-    </div>
+        
+        <li id="section-13">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-13">&#182;</a>
+              </div>
+              <p>This finishes the <strong>mill</strong> <code>CLI</code>.</p>
+
+            </div>
+            
+        </li>
+        
+    </ul>
   </div>
 </body>
 </html>

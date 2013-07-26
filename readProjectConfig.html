@@ -4,260 +4,377 @@
 <head>
   <title>readProjectConfig.js</title>
   <meta http-equiv="content-type" content="text/html; charset=UTF-8">
-  <link rel="stylesheet" media="all" href="public/stylesheets/normalize.css" />
+  <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
   <link rel="stylesheet" media="all" href="docco.css" />
 </head>
 <body>
-  <div class="container">
-    <div class="page">
-
-      <div class="header">
-        
-          <h1>readProjectConfig.js</h1>
-        
-
-        
-          <div class="toc">
-            <h3>Table of Contents</h3>
-            <ol>
+  <div id="container">
+    <div id="background"></div>
+    
+      <ul id="jump_to">
+        <li>
+          <a class="large" href="javascript:void(0);">Jump To &hellip;</a>
+          <a class="small" href="javascript:void(0);">+</a>
+          <div id="jump_wrapper">
+          <div id="jump_page">
+            
               
-                
-                <li>
-                  <a class="source" href="alias.html">
-                    alias.js
-                  </a>
-                </li>
+              <a class="source" href="alias.html">
+                alias.js
+              </a>
+            
               
-                
-                <li>
-                  <a class="source" href="auto-conf.html">
-                    auto-conf.js
-                  </a>
-                </li>
+              <a class="source" href="mill-build.html">
+                mill-build.js
+              </a>
+            
               
-                
-                <li>
-                  <a class="source" href="mill-build.html">
-                    mill-build.js
-                  </a>
-                </li>
+              <a class="source" href="output.html">
+                output.js
+              </a>
+            
               
-                
-                <li>
-                  <a class="source" href="create.html">
-                    create.js
-                  </a>
-                </li>
+              <a class="source" href="readProjectConfig.html">
+                readProjectConfig.js
+              </a>
+            
               
-                
-                <li>
-                  <a class="source" href="debug.html">
-                    debug.js
-                  </a>
-                </li>
+              <a class="source" href="utils.html">
+                utils.js
+              </a>
+            
               
-                
-                <li>
-                  <a class="source" href="output.html">
-                    output.js
-                  </a>
-                </li>
-              
-                
-                <li>
-                  <a class="source" href="readProjectConfig.html">
-                    readProjectConfig.js
-                  </a>
-                </li>
-              
-                
-                <li>
-                  <a class="source" href="utils.html">
-                    utils.js
-                  </a>
-                </li>
-              
-                
-                <li>
-                  <a class="source" href="mill-cli.html">
-                    mill-cli.js
-                  </a>
-                </li>
-              
-            </ol>
+              <a class="source" href="mill-cli.html">
+                mill-cli.js
+              </a>
+            
           </div>
+        </li>
+      </ul>
+    
+    <ul class="sections">
         
-      </div>
+          <li id="title">
+              <div class="annotation">
+                  <h1>readProjectConfig.js</h1>
+              </div>
+          </li>
+        
+        
+        
+        <li id="section-1">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-1">&#182;</a>
+              </div>
+              <p><em>A module to read a papermill project&#39;s configuration</em></p>
+<h1>Setup</h1>
 
-      
-        
-        <p><em>Module to read a papermill project&#39;s configuration</em></p>
-
-        
-          <div class='highlight'><pre><span class="keyword">var</span> fs = require(<span class="string">'fs-extra'</span>),
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="keyword">var</span> fs = require(<span class="string">'fs-extra'</span>),
     path = require(<span class="string">'path'</span>),
     f = require(<span class="string">'underscore'</span>),
     mill = require(<span class="string">'../mill-cli'</span>),
-    tool = require(<span class="string">'./utils'</span>);
+    tool = require(<span class="string">'./utils'</span>);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-2">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h1">
+                <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+              <h1>Module</h1>
 
-module.exports = <span class="function"><span class="keyword">function</span> <span class="title">readConfig</span><span class="params">(directory, millconf, callback)</span> {</span>
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>module.exports = <span class="function"><span class="keyword">function</span> <span class="title">readConfig</span><span class="params">(directory, millconf, callback)</span> {</span>
   
   <span class="keyword">var</span> dir = directory || process.cwd;
-  millconf = millconf;</pre></div>
+  millconf = millconf;</pre></div></div>
+            
+        </li>
         
-      
         
-        <ol>
+        <li id="section-3">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-3">&#182;</a>
+              </div>
+              <ol>
 <li>Get the config files with a function which 
 gives back an array of exisiting config files.</li>
 </ol>
 
-        
-          <div class='highlight'><pre>  getConfigFiles(millconf, dir, 
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  getConfigFiles(millconf, dir, 
     
     <span class="function"><span class="keyword">function</span> <span class="params">(err, configs)</span> {</span>
     
-    <span class="keyword">if</span> (err) { <span class="keyword">return</span> callback(err); }</pre></div>
+    <span class="keyword">if</span> (err) { <span class="keyword">return</span> callback(err); }</pre></div></div>
+            
+        </li>
         
-      
         
-        <ol>
+        <li id="section-4">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-4">&#182;</a>
+              </div>
+              <ol>
 <li>Read the first found config and <code>callback</code> with it.</li>
 </ol>
 
-        
-          <div class='highlight'><pre>    readConfigs(configs, directory, callback);
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    readConfigs(configs, directory, callback);
 
   });
 
-}</pre></div>
+}</pre></div></div>
+            
+        </li>
         
-      
         
-        <p>Function to search for configuration files: </p>
+        <li id="section-5">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h1">
+                <a class="pilcrow" href="#section-5">&#182;</a>
+              </div>
+              <h1>Worker functions</h1>
+<h2>getConfigFiles</h2>
+<p>A function to search for configuration files: </p>
 
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="function"><span class="keyword">function</span> <span class="title">getConfigFiles</span><span class="params">(millconf, directory, callback)</span> {</span></pre></div></div>
+            
+        </li>
         
-          <div class='highlight'><pre><span class="function"><span class="keyword">function</span> <span class="title">getConfigFiles</span><span class="params">(millconf, directory, callback)</span> {</span></pre></div>
         
-      
-        
-        <p>Search for all (configured) configuration file names. </p>
+        <li id="section-6">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-6">&#182;</a>
+              </div>
+              <p>Search for all (configured) configuration file names. </p>
 
-        
-          <div class='highlight'><pre>  tool.searchFs(<span class="string">"{"</span> + millconf.CONFIGFILES + <span class="string">"}"</span>, directory, 
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  tool.searchFs(<span class="string">"{"</span> + millconf.CONFIGFILES + <span class="string">"}"</span>, directory, 
     
-    <span class="function"><span class="keyword">function</span> <span class="title">searchResults</span><span class="params">(err, files)</span> {</span></pre></div>
+    <span class="function"><span class="keyword">function</span> <span class="title">searchResults</span><span class="params">(err, files)</span> {</span></pre></div></div>
+            
+        </li>
         
-      
         
-        <p>If there was an error, or we got back an <em>empty array</em>, 
+        <li id="section-7">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-7">&#182;</a>
+              </div>
+              <p>If there was an error, or we got back an <em>empty array</em>, 
 we callback with an error.</p>
 
-        
-          <div class='highlight'><pre>      <span class="keyword">if</span> (err || !files.length) {        
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      <span class="keyword">if</span> (err || !files.length) {        
         <span class="keyword">var</span> msg = err || <span class="string">"No config file found!"</span>;
         <span class="keyword">return</span> callback(<span class="keyword">new</span> Error(msg), <span class="literal">null</span>);
-      }</pre></div>
+      }</pre></div></div>
+            
+        </li>
         
-      
         
-        <p>Otherwise, we convert all the list entries to full paths </p>
+        <li id="section-8">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-8">&#182;</a>
+              </div>
+              <p>Otherwise, we convert all the list entries to full paths </p>
 
-        
-          <div class='highlight'><pre>      files.forEach(<span class="function"><span class="keyword">function</span> <span class="params">(file, i)</span> {</span>
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      files.forEach(<span class="function"><span class="keyword">function</span> <span class="params">(file, i)</span> {</span>
         files[i] = path.join(directory, file);
-      });</pre></div>
+      });</pre></div></div>
+            
+        </li>
         
-      
         
-        <p>and callback with the list of existing config files.</p>
+        <li id="section-9">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-9">&#182;</a>
+              </div>
+              <p>and callback with the list of existing config files.</p>
 
-        
-          <div class='highlight'><pre>      <span class="keyword">return</span> callback(<span class="literal">null</span>, files);
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      <span class="keyword">return</span> callback(<span class="literal">null</span>, files);
       
     }
     
   );
   
-}</pre></div>
+}</pre></div></div>
+            
+        </li>
         
-      
         
-        <p>Function to read configs:</p>
+        <li id="section-10">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h2">
+                <a class="pilcrow" href="#section-10">&#182;</a>
+              </div>
+              <h2>readConfigs</h2>
+<p>Function to read config file(s).</p>
 
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="function"><span class="keyword">function</span> <span class="title">readConfigs</span><span class="params">(list, directory, callback)</span> {</span></pre></div></div>
+            
+        </li>
         
-          <div class='highlight'><pre><span class="function"><span class="keyword">function</span> <span class="title">readConfigs</span><span class="params">(list, directory, callback)</span> {</span></pre></div>
         
-      
-        
-        <ul>
+        <li id="section-11">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-11">&#182;</a>
+              </div>
+              <ul>
 <li>prepare result objects</li>
 </ul>
 
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="keyword">var</span> JSONfile,
+      result;</pre></div></div>
+            
+        </li>
         
-          <div class='highlight'><pre>  <span class="keyword">var</span> JSONfile,
-      result;</pre></div>
         
-      
-        
-        <ul>
+        <li id="section-12">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-12">&#182;</a>
+              </div>
+              <ul>
 <li>clean the list: remove directories</li>
 </ul>
 
-        
-          <div class='highlight'><pre>  tool.cleanDirectories( list, 
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  tool.cleanDirectories( list, 
     
-    <span class="function"><span class="keyword">function</span> <span class="params">(result)</span> {</span></pre></div>
+    <span class="function"><span class="keyword">function</span> <span class="params">(result)</span> {</span></pre></div></div>
+            
+        </li>
         
-      
         
-        <p>return error if the list is empty after cleaning</p>
+        <li id="section-13">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-13">&#182;</a>
+              </div>
+              <p>return error if the list is empty after cleaning</p>
 
-        
-          <div class='highlight'><pre>      <span class="keyword">if</span> (!result.length) {
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      <span class="keyword">if</span> (!result.length) {
         <span class="keyword">return</span> callback(<span class="string">"No config file found!"</span>);
       }
-      <span class="keyword">else</span> {</pre></div>
+      <span class="keyword">else</span> {</pre></div></div>
+            
+        </li>
         
-      
         
-        <ul>
+        <li id="section-14">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-14">&#182;</a>
+              </div>
+              <ul>
 <li>pick the first config file from the remaining list</li>
 </ul>
 
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        JSONfile = f.first(result);
+        <span class="keyword">if</span> (mill.DEBUG) { mill.log.debug(<span class="string">"config file: "</span> + JSONfile); }</pre></div></div>
+            
+        </li>
         
-          <div class='highlight'><pre>        JSONfile = f.first(result);
-        <span class="keyword">if</span> (mill) mill.log.debug(<span class="string">"config file: "</span> + JSONfile);</pre></div>
         
-      
-        
-        <ul>
+        <li id="section-15">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-15">&#182;</a>
+              </div>
+              <ul>
 <li>safely read and parse the JSON file</li>
 </ul>
 
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        fs.readJson(JSONfile, <span class="function"><span class="keyword">function</span> <span class="params">(err, data)</span> {</span></pre></div></div>
+            
+        </li>
         
-          <div class='highlight'><pre>        fs.readJson(JSONfile, <span class="function"><span class="keyword">function</span> <span class="params">(err, data)</span> {</span></pre></div>
         
-      
-        
-        <ul>
+        <li id="section-16">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-16">&#182;</a>
+              </div>
+              <ul>
 <li>check for error or missing data</li>
 </ul>
 
-        
-          <div class='highlight'><pre>          <span class="keyword">if</span> (err || !data) {
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>          <span class="keyword">if</span> (err || !data) {
             err = err || <span class="keyword">new</span> Error(<span class="string">'Could not read config!'</span>);
             callback(err);
-          }</pre></div>
+          }</pre></div></div>
+            
+        </li>
         
-      
         
-        <ul>
+        <li id="section-17">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-17">&#182;</a>
+              </div>
+              <ul>
 <li>add the path and <code>callback</code></li>
 </ul>
 
-        
-          <div class='highlight'><pre>          data.path = directory;
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>          data.path = directory;
+          
+          <span class="keyword">if</span> (mill.DEBUG) { mill.log.debug(<span class="string">"data"</span>, data); }
           callback(<span class="literal">null</span>, data);
           
         });
@@ -266,11 +383,11 @@ we callback with an error.</p>
 
     }
   );
-}</pre></div>
+}</pre></div></div>
+            
+        </li>
         
-      
-      <div class="fleur">h</div>
-    </div>
+    </ul>
   </div>
 </body>
 </html>
