@@ -32,18 +32,30 @@ See [papermill](https://github.com/papermill/documentation).
 
 
 2. Install `mill` with:  
-   `sudo npm install --global https://github.com/papermill/mill/tarball/master`
+   `sudo npm install --global mill-cli`
+
 
 ## Use
 
-These is just 1 command for now:
+There is just 1 command for now:
 
     output                 Output from a papermil project config file
 
 
-## Project config
+## Project config: `papermill.json`
 
-spec TBD
+- can have different names, we search for this list and pick the first result:
+    * "_papermill/config.json"
+    * "_papermill/papermill.json"
+    * "papermill/config.json"
+    * "papermill/papermill.json"
+    * ".papermill/config.json"
+    * ".papermill/papermill.json"
+    * ".papermill"
+    * ".papermill.json"
+    * "papermill.json"
+
+- spec TBD
 
 Simple example:
 
