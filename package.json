@@ -1,7 +1,7 @@
 {
   "name": "mill-cli",
   "description": "papermill CLI tool",
-  "version": "0.1.0",
+  "version": "0.1.0-pre1",
   "author": "Max F. Albrecht",
   "homepage": "http://papermill.in",
   "bin": {
