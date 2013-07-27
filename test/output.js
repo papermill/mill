@@ -17,7 +17,10 @@ vows.describe('The mill CLI')
       var callback = this.callback;
       fs.remove(path.join(sample, '_output'), function(err, res) {
         if (err) callback(err);
-        exec(mill + ' output ' + sample, callback);
+        exec(mill + ' output ' + sample, function (err, res) {
+          console.log(err || res);
+          callback(err || null, res || null);
+        });
       });
     },
     'creates a file.': {
