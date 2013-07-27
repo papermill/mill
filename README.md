@@ -24,9 +24,9 @@ See [papermill](https://github.com/papermill/documentation).
          `brew install haskell-plattform cabal-install && cabal update && cabal install pandoc`
        - ***or*** get the [pandoc package installer](http://code.google.com/p/pandoc/downloads/)  
 
-- `LaTeX` (output to PDF with Pandoc via LaTeX)
-    - **Debian/Ubuntu**: `sudo apt-get install texlive`
-    - **Arch Linux**: `sudo pacman -S texlive-most`
+- `LaTeX` **with `XeTex`** (output to PDF with Pandoc via LaTeX)
+    - **Debian/Ubuntu**: `sudo apt-get install texlive texlive-xetex`
+    - **Arch Linux**: `sudo pacman -S texlive texlive-xetex`
     - **OS X**: Get the [MacTeX distribution](http://www.tug.org/mactex/index.html)
 
 
