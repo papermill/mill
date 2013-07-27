@@ -2,6 +2,8 @@
 
 *written in javascript on node.js*
 
+[![Build Status](https://travis-ci.org/papermill/mill.png?branch=master)](https://travis-ci.org/papermill/mill)
+
 ## WTF?
 
 See [papermill](https://github.com/papermill/documentation).
