@@ -1,6 +1,8 @@
 /_stash
 /docs
 Makefile
+.travis.yml
+
 
 #dev stuff - no ready yet
 lib/auto-conf.js
