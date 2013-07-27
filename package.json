@@ -9,8 +9,7 @@
   },
   "main": "mill-cli.js",
   "scripts": {
-    "test": "vows test/*.js --spec",
-    "start": "node app.js"
+    "test": "./node_modules/vows/bin/vows test/*.js --spec"
   },
   "dependencies": {
     "flatiron": "0.3.5",
