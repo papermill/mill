@@ -17,9 +17,9 @@
     "underscore": "~1.4.4",
     "fs-extra": "~0.6.3",
     "graceful-fs": "~2.0.0",
-    "temp": "git+https://git@github.com/papermill/node-temp.git",
+    "temp": "https://github.com/papermill/node-temp/tarball/papermill",
     "glob": "~3.2.1",
-    "pandoc-api": "git+https://git@github.com/papermill/node-pandoc-api.git#papermill",
+    "pandoc-api": "https://github.com/papermill/node-pandoc-api/tarball/papermill",
     "eyes": "~0.1.8",
     "vows": "~0.7.0",
     "assert": "~0.4.9"
