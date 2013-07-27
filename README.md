@@ -45,19 +45,15 @@ There is just 1 command for now:
 ## Project configuration: `papermill.json`
 
 - can have different names, we search for this list and pick the first result:
-    * "_papermill/config.json"
-    * "_papermill/papermill.json"
-    * "papermill/config.json"
-    * "papermill/papermill.json"
-    * ".papermill/config.json"
-    * ".papermill/papermill.json"
-    * ".papermill"
-    * ".papermill.json"
-    * "papermill.json"
+    * `papermill.json`
+    * `.papermill.json`
+    * `.papermill`
+    * `{_,.,}papermill/papermill.json`
+    * `{_,.,}papermill/config.json`
 
 - spec TBD
 
-# metadata
+### metadata
 
 We expect to support most values like in `npm`s `package.json`.
 For now, 'author' and 'name' are requires, 'name' meaning the project's name, not any document's title.
@@ -166,7 +162,7 @@ Settings can be nested!
 
 ```js
 {
-  "bibliography": "foo.bib"          // all inputs will use this
+  "bibliography": "foo.bib"          // all inputs will use "foo.bib"
   "input": {
     "path": "text",
     "list": [
@@ -185,17 +181,28 @@ Settings can be nested!
 
 ### Examples
 
+#### Most simple example:
+
+```js
+{
+  "author": "Your Name",         // like in package.json
+  "name": "project_identifier",  // like in package.json
+  "input": "paper.md"            // input file
+}
+```
+
 #### Simple example:
 
 ```js
 {
   "author": "Author Name",
   "name": "project_identifier",
-  "input": "paper.md", // input path
+  "input": "paper.md",  // input folder! 
+                        //all files in here will be combined in order!
   "output": {
-    "path": "_print",  // folder where files are put
-    "web": false       // 'print' and 'web' are default targets
-    "class": "article" // 'LaTeX' config
+    "path": "_print",   // folder where files are put
+    "web": false        // 'print' and 'web' are default targets
+    "class": "article"  // 'LaTeX' config
   }
 }
 ```
