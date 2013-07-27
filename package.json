@@ -21,12 +21,9 @@
     "temp": "~0.5.1",
     "glob": "~3.2.1",
     "pandoc-api": "git+https://git@github.com/papermill/node-pandoc-api.git#papermill",
-    "eyes": "~0.1.8"
-  },
-  "devDependencies": {
-    "cli-easy": "0.1.0",
-    "assert": "~0.4.9",
-    "vows": "~0.7.0"
+    "eyes": "~0.1.8",
+    "vows": "~0.7.0",
+    "assert": "~0.4.9"
   },
   "directories": {
     "doc": "docs",
