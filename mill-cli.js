@@ -90,8 +90,8 @@ app.use(flatiron.plugins.cli, {
   "notFoundUsage": true,
   
   // It is an array of strings, which will be seperated by line breaks.
-  // We start it with our ASCII logo, and append the text to that.
-  usage: app.config.get('banner').concat([
+  // We start it with our ASCII logo (if found), and append the text to that.
+  usage: (app.config.get('banner') || []).concat([
     'Commands:',
     'mill new "Project Title" [-s paper|simple]     Setup a new project',
     'mill print [/path/to/project]                  Output project to PDF',
