@@ -116,6 +116,18 @@ if (app.config.get('debug') === true || app.config.get('DEBUG:on') === true) {
   app.DEBUG = true;
 }
 
+// `init` the app (activates `log` object etc)
+app.init();
+
+// Turn CLI colors off on request (`--no-colors`) 
+// - [from `jitsu`](https://github.com/nodejitsu/jitsu/blob/5ee65b1c3af27ca6c17664add9dea537cce8f0aa/lib/jitsu.js#L163)
+if (!app.config.get('colors')) {
+  // console.log(app)
+  app.log.get('default').stripColors = true;
+  app.log.get('default').transports.console.colorize = false;
+}
+
+
 // 
 // This finishes the **mill** `CLI`.
 // 
