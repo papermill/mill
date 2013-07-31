@@ -9,30 +9,7 @@
     ""
   ],
   
-  "// # ": " SOME CONSTANTS ",
-  "DEFAULT_CONFIGFILE": "papermill.json",
-  "CONFIGFILES": [
-    "_papermill/config.json",
-    "_papermill/papermill.json",
-    "papermill/config.json",
-    "papermill/papermill.json",
-    ".papermill/config.json",
-    ".papermill/papermill.json",
-    ".papermill",
-    ".papermill.json",
-    "papermill.json"
-  ],
-  "MD_EXTENSIONS": [
-    "markdown",
-    "mkdn",
-    "mdown",
-    "md"
-  ],
-  "AUTO_EXCLUDED_DIRS": [
-    "node_modules",
-    ".tmp",
-    ".papermill"
-  ],
+
    
   "stationery": [
     {
@@ -88,5 +65,31 @@
         }
       }
     }
-  }
+  },
+  
+  "// # ": " SOME INTERNAL CONSTANTS — should not be changed",
+  
+  "DEFAULT_CONFIGFILE": "papermill.json",
+  "CONFIGFILES": [
+    "_papermill/config.json",
+    "_papermill/papermill.json",
+    "papermill/config.json",
+    "papermill/papermill.json",
+    ".papermill/config.json",
+    ".papermill/papermill.json",
+    ".papermill.json",
+    "package.json",
+    "papermill.json"
+  ],
+  "MD_EXTENSIONS": [
+    "markdown",
+    "mkdn",
+    "mdown",
+    "md"
+  ],
+  "AUTO_EXCLUDED_DIRS": [
+    "node_modules",
+    ".tmp",
+    ".papermill"
+  ]
 }
