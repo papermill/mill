@@ -12,8 +12,7 @@
 // only file directly called by the operating system. 
 // That is also the reason it needs a "hashbang" as it's first line.
 // 
-// Condensed to its main functionality, the stub looks like this 
-// <small>(and btw it is just copied from [jitsu's cli](https://github.com/nodejitsu/jitsu/blob/master/bin/jitsu))</small>:
+// Condensed to its main functionality, the stub looks like this: ^[and btw it is just copied from [jitsu's cli](https://github.com/nodejitsu/jitsu/blob/master/bin/jitsu)]:
 // 
 // ```js
 // #!/usr/bin/env node
