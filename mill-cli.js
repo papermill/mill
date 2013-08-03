@@ -75,7 +75,7 @@ app.config.argv(); // conf source: arguments is most important
 app.config.env();  // then env vars
 app.config.file({ file: path.join(__dirname, 'config', 'config.json') }); // lastly, our config.json file
 // FIXME: set the dir manually 
-app.config.set('cwd', process.cwd);
+app.config.set('cwd', process.cwd());
   
 // - also use the "cli" plugin (enables lazy-loading commands and color output)
 app.use(flatiron.plugins.cli, {
@@ -87,8 +87,8 @@ app.use(flatiron.plugins.cli, {
   "notFoundUsage": true,
   
   // It is an array of strings, which will be seperated by line breaks.
-  // We start it with our ASCII logo (if found), and append the text to that.
-  usage: (app.config.get('banner') || []).concat([
+  // We start by getting our ASCII logo (if found), and append the text to that.
+  usage: (Array.isArray(app.config.get('banner')) ? app.config.get('banner') : []).concat([
     'Commands:',
     'mill new "Project Title" [-s paper|simple]     Setup a new project',
     'mill print [/path/to/project]                  Output project to PDF',
