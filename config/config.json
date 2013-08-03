@@ -12,6 +12,7 @@
   "// # ": " SOME CONSTANTS ",
   "DEFAULT_CONFIGFILE": "papermill.json",
   "CONFIGFILES": [
+    "package.json",
     "_papermill/config.json",
     "_papermill/papermill.json",
     "papermill/config.json",
