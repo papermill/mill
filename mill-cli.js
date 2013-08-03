@@ -117,8 +117,11 @@ if (app.config.get('debug') || app.config.get('DEBUG:on')) {
 // - [from `jitsu`](https://github.com/nodejitsu/jitsu/blob/5ee65b1c3af27ca6c17664add9dea537cce8f0aa/lib/jitsu.js#L163)
 if (!app.config.get('colors')) {
   
+  app._NOCOLORS = true;
+  
   // app needs to be inited before we can set up the log
   app.init(function (err, res) {
+    
     app.log.get('default').stripColors = true;
     app.log.get('default').transports.console.colorize = false;
   });
