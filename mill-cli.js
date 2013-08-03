@@ -73,7 +73,7 @@ var app = mill = module.exports = flatiron.app;
 
 app.config.argv(); // conf source: arguments is most important
 app.config.env();  // then env vars
-app.config.file({ file: path.join(__dirname, 'config', 'config.json') }); // lastly, our config.json file
+app.config.file('file', path.join(__dirname, 'config', 'config.json')); // lastly, our config.json file
 // FIXME: set the dir manually 
 app.config.set('cwd', process.cwd());
   
@@ -108,8 +108,7 @@ require('./lib/alias');
 
 // The CLI can be run in debug mode. 
 // We detect if the user wants it and set a variable for it to use throughout the program.
-if (app.config.get('debug') === true || app.config.get('DEBUG:on') === true) {
-  console.log("DEBUG MODE!");
+if (app.config.get('debug') || app.config.get('DEBUG:on')) {
   app.DEBUG = true;
 }
 
