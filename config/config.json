@@ -9,9 +9,12 @@
     ""
   ],
   
+  "colors": true,
+  
   "// # ": " SOME CONSTANTS ",
   "DEFAULT_CONFIGFILE": "papermill.json",
   "CONFIGFILES": [
+    "package.json",
     "_papermill/config.json",
     "_papermill/papermill.json",
     "papermill/config.json",
@@ -74,18 +77,16 @@
       "web": {
         "write": "html5",
         "sectionDivs": true,
-        "variable": {
-          "webfont": true,
-          "scripts": true
-        }
+        "webfont": true,
+        "scripts": true
       },
       "print": {
         "class": "report",
         "latexEngine": "xelatex",
-        "variable": {
-          "links-as-notes": true,
-          "verbatim-in-note": true
-        }
+        "linkcolor": "black",
+        "urlcolor": "black",
+        "links-as-notes": true,
+        "verbatim-in-note": true
       }
     }
   }

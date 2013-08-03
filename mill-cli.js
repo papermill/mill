@@ -12,8 +12,7 @@
 // only file directly called by the operating system. 
 // That is also the reason it needs a "hashbang" as it's first line.
 // 
-// Condensed to its main functionality, the stub looks like this 
-// <small>(and btw it is just copied from [jitsu's cli](https://github.com/nodejitsu/jitsu/blob/master/bin/jitsu))</small>:
+// Condensed to its main functionality, the stub looks like this: ^[and btw it is just copied from [jitsu's cli](https://github.com/nodejitsu/jitsu/blob/master/bin/jitsu)]:
 // 
 // ```js
 // #!/usr/bin/env node
@@ -38,9 +37,7 @@
 // - we need *path* for working with paths.
 var path = require('path'),
 
-// <small> \smallsize
 // *A Note about external modules:* After `npm install --save something` in the app dir, they are installed in the sub-folder 'node_modules', thus will be found *automagically*. The `--save` falgs also instructs `npm` to write this 'dependency' to the `package.json` file.
-// </small> /normalsize
 // 
 // Now, we `require()` our external modules.
 // - the *flatiron* anti-framework 
@@ -76,9 +73,9 @@ var app = mill = module.exports = flatiron.app;
 
 app.config.argv(); // conf source: arguments is most important
 app.config.env();  // then env vars
-app.config.file({ file: path.join(__dirname, 'config', 'config.json') }); // lastly, our config.json file
+app.config.file('file', path.join(__dirname, 'config', 'config.json')); // lastly, our config.json file
 // FIXME: set the dir manually 
-app.config.set('cwd', process.cwd);
+app.config.set('cwd', process.cwd());
   
 // - also use the "cli" plugin (enables lazy-loading commands and color output)
 app.use(flatiron.plugins.cli, {
@@ -90,8 +87,8 @@ app.use(flatiron.plugins.cli, {
   "notFoundUsage": true,
   
   // It is an array of strings, which will be seperated by line breaks.
-  // We start it with our ASCII logo, and append the text to that.
-  usage: app.config.get('banner').concat([
+  // We start by getting our ASCII logo (if found), and append the text to that.
+  usage: (Array.isArray(app.config.get('banner')) ? app.config.get('banner') : []).concat([
     'Commands:',
     'mill new "Project Title" [-s paper|simple]     Setup a new project',
     'mill print [/path/to/project]                  Output project to PDF',
@@ -111,9 +108,20 @@ require('./lib/alias');
 
 // The CLI can be run in debug mode. 
 // We detect if the user wants it and set a variable for it to use throughout the program.
-if (app.config.get('debug') === true || app.config.get('DEBUG:on') === true) {
-  console.log("DEBUG MODE!");
+if (app.config.get('debug') || app.config.get('DEBUG:on')) {
   app.DEBUG = true;
+}
+
+
+// Turn CLI colors off on request (`--no-colors`, `{ "colors": true }`) 
+// - [from `jitsu`](https://github.com/nodejitsu/jitsu/blob/5ee65b1c3af27ca6c17664add9dea537cce8f0aa/lib/jitsu.js#L163)
+if (!app.config.get('colors')) {
+  
+  // app needs to be inited before we can set up the log
+  app.init(function (err, res) {
+    app.log.get('default').stripColors = true;
+    app.log.get('default').transports.console.colorize = false;
+  });
 }
 
 // 
