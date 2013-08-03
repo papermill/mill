@@ -38,9 +38,7 @@
 // - we need *path* for working with paths.
 var path = require('path'),
 
-// <small> \smallsize
 // *A Note about external modules:* After `npm install --save something` in the app dir, they are installed in the sub-folder 'node_modules', thus will be found *automagically*. The `--save` falgs also instructs `npm` to write this 'dependency' to the `package.json` file.
-// </small> /normalsize
 // 
 // Now, we `require()` our external modules.
 // - the *flatiron* anti-framework 
