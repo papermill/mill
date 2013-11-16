@@ -1,12 +1,9 @@
 {
-  "name": "mill-cli",
-  "description": "papermill CLI tool",
-  "version": "0.1.0-pre4",
+  "name": "papermill",
+  "description": "papermill library",
+  "version": "1.0.0-pre1",
   "author": "Max F. Albrecht",
   "homepage": "http://papermill.in",
-  "bin": {
-    "mill": "./bin/mill"
-  },
   "main": "mill-cli.js",
   "scripts": {
     "test": "./node_modules/vows/bin/vows test/*.js --spec"
